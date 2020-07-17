@@ -115,6 +115,218 @@ Now that everything is spun up, open your browser of choice and let's do some qu
 
   ![Consul Node Health Check](.images/2020-07-17-11-38-33.png)
 
+### Vault Validation
+
+Now that we've validated our Consul cluster, let's now take a look
+at Vault.
+
+> NOTE: Vault is in an unsealed state at the time of spinning up.
+
+As part of the provisioning, our Vault keys are stored on each of the
+Vault servers (Not the safest, but...). So, let's see how we can get access
+to these.
+
+Let's SSH into anyone of our Vault servers using `vagrant ssh vault[01-03]`.
+
+```bash
+vagrant ssh vault01
+...
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-76-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+Last login: Fri Jul 17 15:42:58 2020 from 192.168.250.1
+vagrant@vault01:~$
+```
+
+Now we will change into the `/etc/vault.d` directory and take a look.
+
+```bash
+cd /etc/vault.d
+ls -la
+...
+vagrant@vault01:/etc/vault.d$ ls -la
+total 16
+drwxr-xr-x  2 root root  4096 Jul 17 14:44 .
+drwxr-xr-x 80 root root  4096 Jul 17 14:43 ..
+-r--------  1 root root   768 Jul 17 14:44 .hashi_vault_init.json
+-rw-r--r--  1 root vault  493 Jul 17 14:44 vault-config.json
+vagrant@vault01:/etc/vault.d$
+```
+
+And if you notice there is a hidden file `.hashi_vault_init.json` with only
+read permissions for the `root` user. So, in order to view the keys we will need
+to use `sudo`.
+
+```bash
+sudo cat .hashi_vault_init.json
+...
+vagrant@vault01:/etc/vault.d$ sudo cat .hashi_vault_init.json
+{
+    "keys": [
+        "b1533be3b65c1e05858c550fcd2e722f828503ccdd4541ced7c14ee2aa404f7811",
+        "78c46bf18d4ddc5d8d5c00954efcf327e42e2fe710962db8cb33fd2c2ad4b52dfb",
+        "1d0acc10e611f6f6cd28fc4acc71c9f69495e29000749530bebd01bdcac426d82c",
+        "30825bcbfbf1781229adfff74ec94d07bb1c39e7eea052dd62bd66edb70670fb0d",
+        "4b620d270f19cf491b62841527f083debecfdbf2e7979a203d60c2aefeda191580"
+    ],
+    "keys_base64": [
+        "sVM747ZcHgWFjFUPzS5yL4KFA8zdRUHO18FO4qpAT3gR",
+        "eMRr8Y1N3F2NXACVTvzzJ+QuL+cQli24yzP9LCrUtS37",
+        "HQrMEOYR9vbNKPxKzHHJ9pSV4pAAdJUwvr0BvcrEJtgs",
+        "MIJby/vxeBIprf/3TslNB7scOefuoFLdYr1m7bcGcPsN",
+        "S2INJw8Zz0kbYoQVJ/CD3r7P2/Lnl5ogPWDCrv7aGRWA"
+    ],
+    "root_token": "s.DQ84tbYvsaiG8sipOiK6OmLv"
+}
+vagrant@vault01:/etc/vault.d$
+```
+
+Now let's check our Vault status from the CLI while we're here.
+
+First we will need to set an environment variable to define our `VAULT_ADDR`. This is required because we are not using TLS, which
+is the default for the `vault` command.
+
+```bash
+export VAULT_ADDR="http://127.0.0.1:8200"
+```
+
+Now we can check our Vault status properly from the CLI.
+
+```bash
+vault status
+...
+vagrant@vault01:/etc/vault.d$ vault status
+Key             Value
+---             -----
+Seal Type       shamir
+Initialized     true
+Sealed          false
+Total Shares    5
+Threshold       3
+Version         1.4.1
+Cluster Name    vault-cluster-57e7a21f
+Cluster ID      2691685a-390d-50d9-48b4-e9efc459016a
+HA Enabled      true
+HA Cluster      https://192.168.250.21:8201
+HA Mode         active
+vagrant@vault01:/etc/vault.d$
+```
+
+While we are here, let's also take a quick look at our Vault configuration.
+
+```bash
+cat vault-config.json
+...
+vagrant@vault01:/etc/vault.d$ cat vault-config.json
+{
+    "api_addr": "http://192.168.250.21:8200",
+    "cluster_addr": "http://192.168.250.21:8201",
+    "listener": [
+        {
+            "tcp": {
+                "address": "192.168.250.21:8200",
+                "cluster_address": "192.168.250.21:8201",
+                "tls_disable": true
+            }
+        },
+        {
+            "tcp": {
+                "address": "127.0.0.1:8200",
+                "tls_disable": true
+            }
+        }
+    ],
+    "storage": {
+        "consul": {
+            "address": "127.0.0.1:8500",
+            "path": "vault/",
+            "scheme": "http"
+        }
+    },
+    "ui": true
+}
+vagrant@vault01:/etc/vault.d$
+```
+
+And if you notice in the `storage` portion, we are using the adress of `127.0.0.1`.
+
+```bash
+    "storage": {
+        "consul": {
+            "address": "127.0.0.1:8500",
+            "path": "vault/",
+            "scheme": "http"
+        }
+    },
+```
+
+The reason for this is that we are using a Consul client installation on the
+Vault servers to properly join our Consul cluster.
+
+If you take a look at the Consul configuration you'll see how that is done. So,
+let's change into the `/etc/consul.d` directory.
+
+```bash
+cd /etc/consul.d
+ls -la
+...
+vagrant@vault01:/etc/consul.d$ ls -la
+total 16
+drwxr-xr-x  4 root root 4096 Jul 17 14:43 .
+drwxr-xr-x 80 root root 4096 Jul 17 14:43 ..
+drwxr-xr-x  2 root root 4096 Jul 17 14:43 client
+drwxr-xr-x  2 root root 4096 Jul 17 14:43 scripts
+vagrant@vault01:/etc/consul.d$
+```
+
+Because we are using Consul as a client rather than a server, let's change into
+the `client` directory.
+
+```bash
+cd client
+ls -la
+...
+vagrant@vault01:/etc/consul.d/client$ ls -la
+total 12
+drwxr-xr-x 2 root root 4096 Jul 17 14:43 .
+drwxr-xr-x 4 root root 4096 Jul 17 14:43 ..
+-rw-r--r-- 1 root root  414 Jul 17 14:43 config.json
+vagrant@vault01:/etc/consul.d/client$
+```
+
+In this directory you will find the `config.json` file. So, let's take a look
+at that.
+
+```bash
+cat config.json
+...
+vagrant@vault01:/etc/consul.d/client$ cat config.json
+{
+    "bind_addr": "192.168.250.21",
+    "client_addr": "0.0.0.0",
+    "data_dir": "/var/consul/data",
+    "datacenter": "dc1",
+    "enable_syslog": true,
+    "encrypt": "WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=",
+    "log_level": "DEBUG",
+    "node_name": "vault01",
+    "retry_join": [
+        "192.168.250.11",
+        "192.168.250.12",
+        "192.168.250.13"
+    ],
+    "server": false,
+    "ui": true
+}
+vagrant@vault01:/etc/consul.d/client$
+```
+
+And if you take a look at the `retry_join` portion, you'll notice that we have
+our three Consul servers defined.
+
 ## Tearing Down
 
 When you are all done learning and are ready to tear everything down,

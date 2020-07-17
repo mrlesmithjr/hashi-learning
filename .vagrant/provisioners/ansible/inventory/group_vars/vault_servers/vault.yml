@@ -10,6 +10,9 @@ hashi_vault_configuration:
         address: "{{ hostvars[inventory_hostname]['ansible_'+vault_bind_interface]['ipv4']['address']+':8200' }}"
         cluster_address: "{{ hostvars[inventory_hostname]['ansible_'+vault_bind_interface]['ipv4']['address']+':8201' }}"
         tls_disable: true
+    - tcp:
+        address: 127.0.0.1:8200
+        tls_disable: true
   storage:
     consul:
       address: 127.0.0.1:8500

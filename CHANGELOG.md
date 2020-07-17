@@ -1,3 +1,9 @@
+commit abc6a933cae2ffc48f97c16bc78d3ce7b73dec52
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 11:39:27 2020 -0400
+
+    Updated initial images
+
 commit aa3eba2c1ea8df0d7fdf2e8e5d907846735c9ae7
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Fri Jul 17 11:21:31 2020 -0400
