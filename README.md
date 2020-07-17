@@ -105,15 +105,15 @@ Now that everything is spun up, open your browser of choice and let's do some qu
 
 - [Consul Services](http://192.168.250.11:8500/ui/dc1/services)
 
-  ![Consul Services](.images/2020-07-17-10-55-49.png)
+  ![Consul Services](.images/2020-07-17-11-35-32.png)
 
 - [Consul Node Status](http://192.168.250.11:8500/ui/dc1/nodes)
 
-  ![Consul Node Status](.images/2020-07-17-10-50-24.png)
+  ![Consul Node Status](.images/2020-07-17-11-37-31.png)
 
 - [Consul Node Health Check](http://192.168.250.11:8500/ui/dc1/nodes/vault01)
 
-  ![Consul Node Health Check](.images/2020-07-17-11-05-15.png)
+  ![Consul Node Health Check](.images/2020-07-17-11-38-33.png)
 
 ## Tearing Down
 
