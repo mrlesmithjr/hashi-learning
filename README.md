@@ -115,6 +115,174 @@ Now that everything is spun up, open your browser of choice and let's do some qu
 
   ![Consul Node Health Check](.images/2020-07-17-11-38-33.png)
 
+Let's now SSH into any one of our Consul servers using `vagrant ssh consul[01-03]`.
+
+```bash
+vagrant ssh consul01
+...
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-76-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+Last login: Fri Jul 17 22:07:35 2020 from 192.168.250.1
+vagrant@consul01:~$
+```
+
+Now that we've logged in, let's change into the `/etc/consul.d` directory.
+
+```bash
+cd /etc/consul.d
+ls -la
+...
+vagrant@consul01:/etc/consul.d$ ls -la
+total 20
+drwxr-xr-x  4 root root 4096 Jul 17 14:43 .
+drwxr-xr-x 79 root root 4096 Jul 17 14:43 ..
+drwxr-xr-x  2 root root 4096 Jul 17 14:43 client
+-rw-r--r--  1 root root  898 Jul 17 14:43 config.json
+drwxr-xr-x  2 root root 4096 Jul 17 14:43 scripts
+vagrant@consul01:/etc/consul.d$
+```
+
+Let's check our Consul cluster status from the CLI while we're here as well.
+
+```bash
+consul members list
+...
+vagrant@consul01:/etc/consul.d$ consul members list
+Node      Address              Status  Type    Build  Protocol  DC   Segment
+consul01  192.168.250.11:8301  alive   server  1.7.2  2         dc1  <all>
+consul02  192.168.250.12:8301  alive   server  1.7.2  2         dc1  <all>
+consul03  192.168.250.13:8301  alive   server  1.7.2  2         dc1  <all>
+vault01   192.168.250.21:8301  alive   client  1.7.2  2         dc1  <default>
+vault02   192.168.250.22:8301  alive   client  1.7.2  2         dc1  <default>
+vault03   192.168.250.23:8301  alive   client  1.7.2  2         dc1  <default>
+vagrant@consul01:/etc/consul.d$
+```
+
+Next let's take a look at `consul01` information specifically.
+
+```bash
+consul info
+...
+vagrant@consul01:/etc/consul.d$ consul info
+agent:
+	check_monitors = 0
+	check_ttls = 0
+	checks = 0
+	services = 0
+build:
+	prerelease =
+	revision = 9ea1a204
+	version = 1.7.2
+consul:
+	acl = disabled
+	bootstrap = false
+	known_datacenters = 1
+	leader = false
+	leader_addr = 192.168.250.13:8300
+	server = true
+raft:
+	applied_index = 5971
+	commit_index = 5971
+	fsm_pending = 0
+	last_contact = 40.955593ms
+	last_log_index = 5971
+	last_log_term = 3
+	last_snapshot_index = 0
+	last_snapshot_term = 0
+	latest_configuration = [{Suffrage:Voter ID:7eae1134-8516-be4a-6956-a5e5479d73e6 Address:192.168.250.11:8300} {Suffrage:Voter ID:050ccc6a-b71f-0e7d-545c-82ee41de1f81 Address:192.168.250.12:8300} {Suffrage:Voter ID:4d6f59b3-10c4-ade4-245f-2fb1c1f06978 Address:192.168.250.13:8300}]
+	latest_configuration_index = 0
+	num_peers = 2
+	protocol_version = 3
+	protocol_version_max = 3
+	protocol_version_min = 0
+	snapshot_version_max = 1
+	snapshot_version_min = 0
+	state = Follower
+	term = 3
+runtime:
+	arch = amd64
+	cpu_count = 1
+	goroutines = 107
+	max_procs = 2
+	os = linux
+	version = go1.13.7
+serf_lan:
+	coordinate_resets = 0
+	encrypted = true
+	event_queue = 0
+	event_time = 3
+	failed = 0
+	health_score = 0
+	intent_queue = 0
+	left = 0
+	member_time = 14
+	members = 9
+	query_queue = 0
+	query_time = 1
+serf_wan:
+	coordinate_resets = 0
+	encrypted = true
+	event_queue = 0
+	event_time = 1
+	failed = 0
+	health_score = 0
+	intent_queue = 0
+	left = 0
+	member_time = 5
+	members = 3
+	query_queue = 0
+	query_time = 1
+vagrant@consul01:/etc/consul.d$
+```
+
+And finally, let's take a quick look at our Consul server configuration:
+
+```bash
+cat config.json
+...
+vagrant@consul01:/etc/consul.d$ cat config.json
+{
+    "acl": {
+        "default_policy": "allow",
+        "down_policy": "extend-cache",
+        "tokens": {
+            "agent": "",
+            "agent_master": "",
+            "default": "",
+            "master": "6DA12E0F-D8A5-48C5-AEFF-00D50E84D01A",
+            "replication": ""
+        }
+    },
+    "bind_addr": "192.168.250.11",
+    "bootstrap_expect": 3,
+    "client_addr": "0.0.0.0",
+    "data_dir": "/var/consul",
+    "datacenter": "dc1",
+    "dns_config": {},
+    "enable_acl_replication": false,
+    "enable_syslog": true,
+    "encrypt": "WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=",
+    "log_level": "DEBUG",
+    "node_name": "consul01",
+    "performance": {},
+    "primary_datacenter": "dc1",
+    "retry_join": [
+        "192.168.250.11",
+        "192.168.250.12",
+        "192.168.250.13"
+    ],
+    "retry_join_wan": [],
+    "server": true,
+    "telemetry": {},
+    "ui": true
+}
+vagrant@consul01:/etc/consul.d$
+```
+
 ### Vault Validation
 
 Now that we've validated our Consul cluster, let's now take a look
@@ -126,7 +294,7 @@ As part of the provisioning, our Vault keys are stored on each of the
 Vault servers (Not the safest, but...). So, let's see how we can get access
 to these.
 
-Let's SSH into anyone of our Vault servers using `vagrant ssh vault[01-03]`.
+Let's SSH into any one of our Vault servers using `vagrant ssh vault[01-03]`.
 
 ```bash
 vagrant ssh vault01
@@ -326,6 +494,14 @@ vagrant@vault01:/etc/consul.d/client$
 
 And if you take a look at the `retry_join` portion, you'll notice that we have
 our three Consul servers defined.
+
+```bash
+    "retry_join": [
+        "192.168.250.11",
+        "192.168.250.12",
+        "192.168.250.13"
+    ],
+```
 
 ## Tearing Down
 
