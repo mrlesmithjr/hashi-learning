@@ -2,6 +2,6 @@
 .terraform
 .vagrant/bundler
 .vagrant/machines
-.vagrant/provisioners/vagrant_ansible_inventory
+.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 .vagrant/rgloader
 venv/
