@@ -1,0 +1,35 @@
+---
+# https://www.consul.io/docs/agent/options.html
+# bootstrap_expect is defined in config.json.j2 template to ensure integer
+consul_configuration:
+  acl:
+    default_policy: allow
+    down_policy: extend-cache
+    tokens:
+      agent: ""
+      agent_master: ""
+      default: ""
+      master: "{{ consul_acl_master_token }}" # Generated using 'uuidgen'
+      replication: ""
+  bind_addr: "{{ hostvars[inventory_hostname]['ansible_' + consul_bind_interface]['ipv4']['address'] }}"
+  client_addr: 0.0.0.0
+  data_dir: /var/consul
+  datacenter: dc1
+  dns_config: {}
+  enable_acl_replication: false
+  enable_syslog: true
+  encrypt: "{{ consul_encrypt_key }}" # Generate using 'consul keygen'
+  log_level: DEBUG
+  node_name: "{{ ansible_hostname }}"
+  performance: {}
+  primary_datacenter: dc1
+  retry_join: |
+    {% set servers = [] %}
+    {% for server in groups[consul_servers_group] %}
+    {%   set _ = servers.append(hostvars[server]['ansible_'+consul_bind_interface]['ipv4']['address']) %}
+    {% endfor %}
+    {{ servers }}
+  retry_join_wan: []
+  server: true
+  telemetry: {}
+  ui: true

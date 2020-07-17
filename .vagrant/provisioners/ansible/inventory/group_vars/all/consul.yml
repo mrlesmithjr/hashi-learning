@@ -1,0 +1,7 @@
+---
+# Generate using 'consul keygen'
+consul_encrypt_key: WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=
+# Generate using 'uuidgen'
+consul_acl_master_token: 6DA12E0F-D8A5-48C5-AEFF-00D50E84D01A
+
+consul_bind_interface: "{{ bind_interface }}"

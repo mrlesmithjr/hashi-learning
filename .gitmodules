@@ -1,0 +1,12 @@
+[submodule "roles/ansible-bootstrap-python"]
+	path = roles/ansible-bootstrap-python
+	url = https://github.com/mrlesmithjr/ansible-bootstrap-python.git
+[submodule "roles/ansible-consul"]
+	path = roles/ansible-consul
+	url = https://github.com/mrlesmithjr/ansible-consul.git
+[submodule "roles/ansible-consul-client"]
+	path = roles/ansible-consul-client
+	url = https://github.com/mrlesmithjr/ansible-consul-client.git
+[submodule "roles/ansible-hashi-vault"]
+	path = roles/ansible-hashi-vault
+	url = https://github.com/mrlesmithjr/ansible-hashi-vault.git

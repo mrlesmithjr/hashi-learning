@@ -1,0 +1,19 @@
+---
+# Define Vault configuration which is converted to JSON using template
+# https://www.vaultproject.io/docs/configuration
+hashi_vault_configuration:
+  api_addr: "{{ 'http://'+hostvars[inventory_hostname]['ansible_'+vault_bind_interface]['ipv4']['address']+':8200' }}"
+  cluster_addr: "{{ 'http://'+hostvars[inventory_hostname]['ansible_'+vault_bind_interface]['ipv4']['address']+':8201' }}"
+  listener:
+    # First address will always be used to define url
+    - tcp:
+        address: "{{ hostvars[inventory_hostname]['ansible_'+vault_bind_interface]['ipv4']['address']+':8200' }}"
+        cluster_address: "{{ hostvars[inventory_hostname]['ansible_'+vault_bind_interface]['ipv4']['address']+':8201' }}"
+        tls_disable: true
+  storage:
+    consul:
+      address: 127.0.0.1:8500
+      path: vault/
+      scheme: http
+  ui: true
+hashi_vault_remain_unsealed: true

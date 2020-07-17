@@ -1,0 +1,2 @@
+---
+consul_client_bind_interface: "{{ bind_interface }}"

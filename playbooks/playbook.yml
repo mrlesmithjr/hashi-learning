@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+    - name: Applying ansible-bootstrap-python role
+      import_role:
+        name: ansible-bootstrap-python
+
+- hosts: consul_servers
+  tasks:
+    - name: Applying ansible-consul
+      import_role:
+        name: ansible-consul
+
+- hosts: vault_servers
+  tasks:
+    - name: Applying ansible-consul-client
+      import_role:
+        name: ansible-consul-client
+
+    - meta: flush_handlers
+
+    - name: Applying ansible-hashi-vault
+      import_role:
+        name: ansible-hashi-vault

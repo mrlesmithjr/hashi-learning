@@ -1,0 +1,19 @@
+---
+# https://www.consul.io/docs/agent/options.html
+consul_client_configuration:
+  bind_addr: "{{ hostvars[inventory_hostname]['ansible_'+consul_client_bind_interface]['ipv4']['address'] }}"
+  client_addr: 0.0.0.0
+  datacenter: dc1
+  data_dir: /var/consul/data
+  enable_syslog: true
+  encrypt: "{{ consul_encrypt_key }}" # Generate using 'consul keygen' - Needs to match servers
+  log_level: DEBUG
+  node_name: "{{ ansible_hostname }}"
+  retry_join: |
+    {% set servers = [] %}
+    {% for server in groups[consul_servers_group] %}
+    {%   set _ = servers.append(hostvars[server]['ansible_'+consul_bind_interface]['ipv4']['address']) %}
+    {% endfor %}
+    {{ servers }}
+  server: false
+  ui: true

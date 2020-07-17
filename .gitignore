@@ -1,0 +1,6 @@
+!*
+.terraform
+.vagrant/bundler
+.vagrant/machines
+.vagrant/rgloader
+venv/
