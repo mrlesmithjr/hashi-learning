@@ -10,3 +10,12 @@
 [submodule "roles/ansible-hashi-vault"]
 	path = roles/ansible-hashi-vault
 	url = https://github.com/mrlesmithjr/ansible-hashi-vault.git
+[submodule "roles/ansible-haproxy"]
+	path = roles/ansible-haproxy
+	url = https://github.com/mrlesmithjr/ansible-haproxy.git
+[submodule "roles/ansible-keepalived"]
+	path = roles/ansible-keepalived
+	url = https://github.com/mrlesmithjr/ansible-keepalived.git
+[submodule "roles/ansible-nginx"]
+	path = roles/ansible-nginx
+	url = https://github.com/mrlesmithjr/ansible-nginx.git
