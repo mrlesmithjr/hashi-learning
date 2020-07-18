@@ -19,6 +19,8 @@
         state: present
       become: true
 
+- hosts: app_servers
+  tasks:
     - name: Manage Consul Services
       consul:
         service_name: "{{ item.name }}"
