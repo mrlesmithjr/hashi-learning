@@ -718,7 +718,7 @@ For us to register Consul services on our app servers, we are using Ansible to
 do this. You can checkout the important pieces of how this is done by viewing
 the following:
 
-- [group_vars/app_servers/consul.yml](group_vars/app_servers/consul.yml)
+- [group_vars/app_servers/consul.yml](.vagrant/provisioners/ansible/inventory/group_vars/consul_servers/consul.yml)
 - [playbooks/app_servers.yml](playbooks/app_servers.yml)
 
 And to prove that they are working correctly through our HAProxy load balancer,
