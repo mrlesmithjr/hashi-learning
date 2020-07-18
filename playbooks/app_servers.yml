@@ -1,0 +1,30 @@
+---
+# Discover facts for usage on app_servers
+- hosts: consul_servers
+
+- hosts: app_servers
+  tasks:
+    - name: Apply ansible-nginx role
+      import_role:
+        name: ansible-nginx
+
+    - name: Apply ansible-consul-client
+      import_role:
+        name: ansible-consul-client
+
+    - name: Installing Python Requirements
+      pip:
+        name:
+          - python-consul
+        state: present
+      become: true
+
+    - name: Manage Consul Services
+      consul:
+        service_name: "{{ item.name }}"
+        service_port: "{{ item.port }}"
+        script: "{{ item.script|default(omit) }}"
+        interval: "{{ item.interval|default(omit) }}"
+        state: "{{ item.state|default(omit) }}"
+      become: true
+      loop: "{{ consul_services }}"

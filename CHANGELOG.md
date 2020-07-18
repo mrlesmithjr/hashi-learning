@@ -1,3 +1,21 @@
+commit 2d633f99be5dfd7b08fb020cf404f716cecdbc0b
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 19:30:57 2020 -0400
+
+    Updated info for Consul validations
+
+commit a6720736fe71baeba6c9b5d14407b161a2290da0
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 19:29:16 2020 -0400
+
+    Added new submodules to prep for HAProxy/Consul
+
+commit 6a553dd3548f68bda4657cddabafdb13911e658c
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 12:21:51 2020 -0400
+
+    Added initial Vault validations
+
 commit abc6a933cae2ffc48f97c16bc78d3ce7b73dec52
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Fri Jul 17 11:39:27 2020 -0400

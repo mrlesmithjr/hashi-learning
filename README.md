@@ -53,6 +53,8 @@ The following list is to outline the current functionality available.
 
 - [Three node Consul cluster](#consul-cluster)
 - [Three node Vault HA setup leveraging Consul](#vault-ha)
+- [Single HAProxy node for Consul service discovery](#haproxy-service-discovery)
+- [Three app servers integrated with HAProxy's Consul service discovery](#app-servers)
 
 #### Consul Cluster
 
@@ -502,6 +504,227 @@ our three Consul servers defined.
         "192.168.250.13"
     ],
 ```
+
+## HAProxy Service Discovery
+
+> NOTE: This scenario was borrowed from [https://learn.hashicorp.com/consul/integrations/haproxy-consul](https://learn.hashicorp.com/consul/integrations/haproxy-consul). However, we've automated the whole process.
+
+To see how we integrate HAProxy with Consul for service discovery. We have a
+working HAProxy node (`lb01`) up and running.
+
+To get a quick view of the HAProxy admin stats page, head over [here](http://192.168.250.101:9090/) and login with `admin:admin`.
+
+![HAProxy admin stats](.images/2020-07-17-22-46-34.png)
+
+And as you can see, we have some web servers up and running. And fully integrated
+with Consul for service discovery.
+
+Let's quickly SSH into our HAProxy server and take a look at the Consul and
+HAProxy configurations.
+
+```bash
+vagrant ssh lb01
+...
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-76-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+Last login: Sat Jul 18 02:51:40 2020 from 10.0.2.2
+vagrant@lb01:~$
+```
+
+Now that we've logged in, let's change to the `/etc/consul.d/client` directory.
+
+```bash
+cd /etc/consul.d/client
+```
+
+Next let's look at the Consul configuration.
+
+```bash
+cat config.json
+...
+vagrant@lb01:/etc/consul.d/client$ cat config.json
+{
+    "bind_addr": "192.168.250.101",
+    "client_addr": "0.0.0.0",
+    "data_dir": "/var/consul/data",
+    "datacenter": "dc1",
+    "enable_script_checks": true,
+    "enable_syslog": true,
+    "encrypt": "WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=",
+    "log_level": "DEBUG",
+    "node_name": "lb01",
+    "retry_join": [
+        "192.168.250.11",
+        "192.168.250.12",
+        "192.168.250.13"
+    ],
+    "server": false,
+    "ui": true
+}
+vagrant@lb01:/etc/consul.d/client$
+```
+
+And from the configuration above, you **SHOULD** notice that this configuration
+looks identical to our Vault server configuration.
+
+Next let's change to the `/etc/haproxy` directory and look at our HAProxy
+configuration.
+
+```bash
+cd /etc/haproxy
+cat haproxy.cfg
+...
+vagrant@lb01:/etc/haproxy$ cat haproxy.cfg
+#
+# Ansible managed
+#
+
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+    chroot /var/lib/haproxy
+    group haproxy
+    maxconn 40000
+    spread-checks 3
+    stats socket /var/run/haproxy.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    # Default SSL material locations
+    ca-base /etc/ssl/certs
+    crt-base /etc/ssl/private
+
+    # Default ciphers to use on SSL-enabled listening sockets.
+    # For more information, see ciphers(1SSL).
+    ssl-default-bind-ciphers kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL
+    ssl-default-bind-options no-sslv3
+
+defaults
+    log global
+    maxconn 40000
+    mode tcp
+    option dontlognull
+    option redispatch
+    option tcp-smart-accept
+    option tcp-smart-connect
+    option tcplog
+    retries 3
+    timeout client 50000
+    timeout connect 50000
+    timeout queue 5000
+    timeout server 50000
+
+userlist STATSUSERS
+    group admin users admin
+    user admin insecure-password admin
+
+frontend stats
+    acl AuthOkay_ReadOnly http_auth(STATSUSERS)
+    acl AuthOkay_Admin http_auth_group(STATSUSERS) admin
+    bind *:9090
+    mode http
+    stats enable
+    stats http-request auth realm stats unless AuthOkay_ReadOnly
+    stats refresh 10s
+    stats show-legends
+    stats uri /
+
+frontend http_front-80
+    bind *:80
+    default_backend http_back
+
+backend http_back
+
+    balance roundrobin
+    server-template mywebapp 10 _web._tcp.service.consul resolvers consul resolve-opts allow-dup-ip resolve-prefer ipv4 check
+
+resolvers consul
+  nameserver consul 127.0.0.1:8600
+  accepted_payload_size 8192
+  hold valid 5s
+vagrant@lb01:/etc/haproxy$
+```
+
+Now looking at this configuration, the real magic is happening within the
+following two blocks:
+
+```bash
+backend http_back
+
+    balance roundrobin
+    server-template mywebapp 10 _web._tcp.service.consul resolvers consul resolve-opts allow-dup-ip resolve-prefer ipv4 check
+```
+
+The above block is defining the `server-template` which is used to perform the
+service discovery within our Consul cluster. The template is telling HAProxy
+to discover the `web` services that are registered in Consul using the `consul`
+resolver as defined below. To do the DNS discovery for us and return the results
+back to HAProxy.
+
+```bash
+resolvers consul
+  nameserver consul 127.0.0.1:8600
+  accepted_payload_size 8192
+  hold valid 5s
+```
+
+## App Servers
+
+We have also spun up three app servers with our stack. These servers will over
+time provide us many different services in which we will use for learning. But
+for now, the following list is what they provide:
+
+- NGINX: HTTP
+
+> NOTE: SSH to any one of `app[01-03]`.
+
+These servers are also running the Consul client which is configured as below:
+
+```bash
+vagrant ssh app01
+cd /etc/consul.d/client
+cat config.json
+...
+vagrant@app01:/etc/consul.d/client$ cat config.json
+{
+    "bind_addr": "192.168.250.31",
+    "client_addr": "0.0.0.0",
+    "data_dir": "/var/consul/data",
+    "datacenter": "dc1",
+    "enable_script_checks": true,
+    "enable_syslog": true,
+    "encrypt": "WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=",
+    "log_level": "DEBUG",
+    "node_name": "app01",
+    "retry_join": [
+        "192.168.250.11",
+        "192.168.250.12",
+        "192.168.250.13"
+    ],
+    "server": false,
+    "ui": true
+}
+vagrant@app01:/etc/consul.d/client$
+```
+
+And once again, we **SHOULD** notice that our Consul client configuration is
+identical to our HAProxy and Vault servers.
+
+For us to register Consul services on our app servers, we are using Ansible to
+do this. You can checkout the important pieces of how this is done by viewing
+the following:
+
+- [group_vars/app_servers/consul.yml](group_vars/app_servers/consul.yml)
+- [playbooks/app_servers.yml](playbooks/app_servers.yml)
+
+And to prove that they are working correctly through our HAProxy load balancer,
+simply browse to [http://192.168.250.101](http://192.168.250.101).
+
+![NGINX-HAProxy](.images/2020-07-17-23-14-46.png)
 
 ## Tearing Down
 

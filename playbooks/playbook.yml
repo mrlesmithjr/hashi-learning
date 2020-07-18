@@ -5,20 +5,10 @@
       import_role:
         name: ansible-bootstrap-python
 
-- hosts: consul_servers
-  tasks:
-    - name: Applying ansible-consul
-      import_role:
-        name: ansible-consul
+- import_playbook: consul.yml
 
-- hosts: vault_servers
-  tasks:
-    - name: Applying ansible-consul-client
-      import_role:
-        name: ansible-consul-client
+- import_playbook: vault.yml
 
-    - meta: flush_handlers
+- import_playbook: loadbalancers.yml
 
-    - name: Applying ansible-hashi-vault
-      import_role:
-        name: ansible-hashi-vault
+- import_playbook: app_servers.yml
