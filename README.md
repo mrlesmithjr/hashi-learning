@@ -726,6 +726,121 @@ simply browse to [http://192.168.250.101](http://192.168.250.101).
 
 ![NGINX-HAProxy](.images/2020-07-17-23-14-46.png)
 
+## Halting Environment
+
+There will likely come a time where you want to halt the whole environment to
+take a break or free up some resources. To do this and not have to rebuild the
+whole stack again, simply:
+
+```bash
+vagrant halt
+...
+▶ vagrant halt
+==> lb01: Attempting graceful shutdown of VM...
+==> app03: Attempting graceful shutdown of VM...
+==> app02: Attempting graceful shutdown of VM...
+==> app01: Attempting graceful shutdown of VM...
+==> vault03: Attempting graceful shutdown of VM...
+==> vault02: Attempting graceful shutdown of VM...
+==> vault01: Attempting graceful shutdown of VM...
+==> consul03: Attempting graceful shutdown of VM...
+==> consul02: Attempting graceful shutdown of VM...
+==> consul01: Attempting graceful shutdown of VM...
+(venv)
+```
+
+And when you are ready to resume where you left off, simply:
+
+```bash
+vagrant up
+...
+▶ vagrant up
+Bringing machine 'consul01' up with 'virtualbox' provider...
+Bringing machine 'consul02' up with 'virtualbox' provider...
+Bringing machine 'consul03' up with 'virtualbox' provider...
+Bringing machine 'vault01' up with 'virtualbox' provider...
+Bringing machine 'vault02' up with 'virtualbox' provider...
+Bringing machine 'vault03' up with 'virtualbox' provider...
+Bringing machine 'app01' up with 'virtualbox' provider...
+Bringing machine 'app02' up with 'virtualbox' provider...
+Bringing machine 'app03' up with 'virtualbox' provider...
+Bringing machine 'lb01' up with 'virtualbox' provider...
+```
+
+Once everything is back up and running, you can jump over to one of the Consul
+servers UI to check quickly on the status of things.
+[http://192.168.250.11:8500/ui/dc1/nodes](http://192.168.250.11:8500/ui/dc1/nodes)
+
+![Consul Node Status](.images/2020-07-18-00-12-30.png)
+
+From the screenshot above, you'll notice that our Vault servers are in a
+sealed state. This is because when Vault starts on boot, it is automatically
+sealed. So, to unseal the Vault, we can run our [playbooks/vault.yml](playbooks/vault.yml)
+Ansible playbook. This playbook will execute our Vault Ansible role again, and
+at the very end it will unseal it.
+
+So, let's do that real quick.
+
+```bash
+ansible-playbook -i hosts playbooks/vault.yml
+...
+
+
+PLAY [consul_servers] ****************************************************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************************************************************
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host consul01 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with
+prior Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [consul01]
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host consul02 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with
+prior Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [consul02]
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host consul03 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with
+prior Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [consul03]
+
+PLAY [vault_servers] *****************************************************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************************************************************
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host vault01 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with
+prior Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [vault01]
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host vault02 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with
+prior Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [vault02]
+[DEPRECATION WARNING]: Distribution Ubuntu 18.04 on host vault03 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with
+prior Ansible releases. A future Ansible release will default to using the discovered platform python for this host. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information. This feature will be removed in version 2.12.
+Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+ok: [vault03]
+```
+
+```bash
+PLAY RECAP ***************************************************************************************************************************************************
+consul01                   : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+consul02                   : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+consul03                   : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+vault01                    : ok=45   changed=3    unreachable=0    failed=0    skipped=17   rescued=0    ignored=0
+vault02                    : ok=44   changed=3    unreachable=0    failed=0    skipped=18   rescued=0    ignored=0
+vault03                    : ok=44   changed=3    unreachable=0    failed=0    skipped=18   rescued=0    ignored=0
+```
+
+And when this completes, take a look at our [http://192.168.250.11:8500/ui/dc1/nodes](http://192.168.250.11:8500/ui/dc1/nodes) once again.
+
+![Consul Node Status](.images/2020-07-18-00-20-12.png)
+
+And we're good to go again!
+
 ## Tearing Down
 
 When you are all done learning and are ready to tear everything down,
