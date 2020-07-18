@@ -1,4 +1,5 @@
 !*
+.DS_Store
 .terraform
 .vagrant/bundler
 .vagrant/machines

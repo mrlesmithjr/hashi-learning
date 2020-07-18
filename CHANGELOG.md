@@ -1,3 +1,23 @@
+commit 2f132c44ba5ffb17599a227e90ed95df01a709c2
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Sat Jul 18 11:15:34 2020 -0400
+
+    Fixes issue with connecting to Consul
+    
+    The Consul service is not yet up at this point. So, we need to let handlers kick in
+
+commit 73cde4f62c890f10c9782fdf61ebaa0a3c9aad59
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Sat Jul 18 00:23:27 2020 -0400
+
+    Added missing screenshot
+
+commit dc146c77aa79342879b4383bc273131b68cea2ce
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Sat Jul 18 00:21:20 2020 -0400
+
+    Added info on halting environment
+
 commit 4a525fffe369a69842b8a19fe20af7f0f9c2ef39
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Fri Jul 17 23:26:17 2020 -0400
