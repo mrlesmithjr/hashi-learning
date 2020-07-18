@@ -1,0 +1,12 @@
+---
+- hosts: consul_servers
+
+- hosts: loadbalancers
+  tasks:
+    - name: Apply ansible-consul-client
+      import_role:
+        name: ansible-consul-client
+
+    - name: Applying ansible-haproxy
+      import_role:
+        name: ansible-haproxy

@@ -1,0 +1,32 @@
+---
+# Defines is HAProxy should be configured
+haproxy_config: true
+
+haproxy_configs:
+  - name: http-80
+    backend_name: http_back
+    balance: roundrobin
+    enabled: true
+    frontend_name: http_front
+    frontend_bind_address: "*"
+    frontend_bind_port: 80
+    server_template:
+      prefix: mywebapp
+      range: 10
+      fqdn: _web._tcp.service.consul
+      resolvers: consul
+      params:
+        - resolve-opts
+        - allow-dup-ip
+        - resolve-prefer ipv4
+        - check
+
+haproxy_resolvers:
+  - name: consul
+    nameservers:
+      - name: consul
+        ip: 127.0.0.1
+        port: 8600
+    options:
+      - accepted_payload_size 8192
+      - hold valid 5s

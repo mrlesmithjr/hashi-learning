@@ -14,7 +14,7 @@ consul_configuration:
   bind_addr: "{{ hostvars[inventory_hostname]['ansible_' + consul_bind_interface]['ipv4']['address'] }}"
   client_addr: 0.0.0.0
   data_dir: /var/consul
-  datacenter: dc1
+  datacenter: "{{ consul_datacenter }}"
   dns_config: {}
   enable_acl_replication: false
   enable_syslog: true
@@ -22,7 +22,7 @@ consul_configuration:
   log_level: DEBUG
   node_name: "{{ ansible_hostname }}"
   performance: {}
-  primary_datacenter: dc1
+  primary_datacenter: "{{ consul_datacenter }}"
   retry_join: |
     {% set servers = [] %}
     {% for server in groups[consul_servers_group] %}

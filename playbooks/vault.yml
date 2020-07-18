@@ -1,0 +1,15 @@
+---
+# Discover facts for usage in Vault
+- hosts: consul_servers
+
+- hosts: vault_servers
+  tasks:
+    - name: Applying ansible-consul-client
+      import_role:
+        name: ansible-consul-client
+
+    - meta: flush_handlers
+
+    - name: Applying ansible-hashi-vault
+      import_role:
+        name: ansible-hashi-vault

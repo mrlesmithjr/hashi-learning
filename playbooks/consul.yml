@@ -1,0 +1,6 @@
+---
+- hosts: consul_servers
+  tasks:
+    - name: Applying ansible-consul
+      import_role:
+        name: ansible-consul

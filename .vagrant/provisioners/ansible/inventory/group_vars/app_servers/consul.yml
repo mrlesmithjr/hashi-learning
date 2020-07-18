@@ -1,0 +1,8 @@
+---
+# Define Consul services for app servers
+consul_services:
+  - name: web
+    port: 80
+    script: curl --silent http://localhost
+    interval: 3s
+    state: present
