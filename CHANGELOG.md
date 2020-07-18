@@ -1,3 +1,25 @@
+commit 4a525fffe369a69842b8a19fe20af7f0f9c2ef39
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 23:26:17 2020 -0400
+
+    Previous group_vars fix was still wrong
+
+commit ea22b23daa40df4567ba2aff2b21b9d52d64b578
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 23:23:37 2020 -0400
+
+    Fixed link to group_vars
+
+commit b15791851a3bcd06275a8245fcaaa53bfec2ddde
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Fri Jul 17 23:18:42 2020 -0400
+
+    Added HAProxy and App Servers
+    
+    This adds HAProxy and Consul integration for service discovery. We have
+    added three app servers that are running NGINX, Consul client, and
+    registering the web service into Consul.
+
 commit 2d633f99be5dfd7b08fb020cf404f716cecdbc0b
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Fri Jul 17 19:30:57 2020 -0400
