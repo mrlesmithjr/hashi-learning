@@ -2,6 +2,26 @@
 
 A fun repository for learning all things HashiCorp.
 
+- [Hashi Learning](#hashi-learning)
+  - [Getting Started](#getting-started)
+    - [Clone Repo](#clone-repo)
+    - [Pre-Reqs](#pre-reqs)
+      - [Python3](#python3)
+  - [Background](#background)
+    - [Current Functionality](#current-functionality)
+      - [Consul Cluster](#consul-cluster)
+      - [Vault HA](#vault-ha)
+  - [Spinning Up](#spinning-up)
+    - [Consul Validation](#consul-validation)
+    - [Vault Validation](#vault-validation)
+  - [HAProxy Service Discovery](#haproxy-service-discovery)
+  - [App Servers](#app-servers)
+  - [Consul DNS and systemd-resolved](#consul-dns-and-systemd-resolved)
+  - [Halting Environment](#halting-environment)
+  - [Tearing Down](#tearing-down)
+  - [License](#license)
+  - [Author Information](#author-information)
+
 ## Getting Started
 
 ### Clone Repo
@@ -725,6 +745,174 @@ And to prove that they are working correctly through our HAProxy load balancer,
 simply browse to [http://192.168.250.101](http://192.168.250.101).
 
 ![NGINX-HAProxy](.images/2020-07-17-23-14-46.png)
+
+## Consul DNS and systemd-resolved
+
+Oh my! **systemd-resolved** What a pain. However, we can work around this
+relatively easy and not disable it. Many times I have opted to just disable
+`systemd-resolved` and install `Dnsmasq` and move on. But for this learnining
+we will install `Dnsmasq`, reconfigure `systemd-resolved` to forward
+to `Dnsmasq`, and configure `Dnsmasq` to forward the `consul` domain to our
+Consul client's DNS port.
+
+We will be doing this on all of our servers within our stack to ensure they
+are all consistent. As well as, properly resolve services registered in Consul
+without the need to do specific work arounds for various things such as: NGINX,
+etc. The benefit will be to understand how we can leverge Consul in any
+environment. To easily reach our services without load balancers, etc.
+For example, we might have an NGINX web server configured as a reverse proxy
+for many different sites within our environment. Think of our NGINX reverse
+proxy functioning as a form of an application gateway. We could frontend our
+application gateways with an external load balancer, which sends all HTTP(s)
+traffic to our application gateways. Then our application gateways can make
+decisions based on the URL, to properly redirect to our applications. The point
+here is that we could easily just define resolvers for NGINX, but that wouldn't
+solve OS level DNS resolution for services such as logging, etc.
+
+So, how do we get this all configured? We have included an Ansible [playbook](playbooks/consul_dnsmasq_systemd_resolved.yml) that will automate all of this
+for us. And if you are interested in this functionality as part of your learning,
+simply execute the following:
+
+```bash
+ansible-playbook -i hosts playbooks/consul_dnsmasq_systemd_resolved.yml
+```
+
+And once we are done executing the above playbook, we can quickly check things
+out. So, let's SSH to `app01` to explore.
+
+```bash
+vagrant ssh app01
+```
+
+Next, let's look at our `systemd-resolved` configuration and then Dnsmasq.
+
+```bash
+cat /etc/systemd/resolved.conf
+...
+vagrant@app01:/etc$ cat /etc/systemd/resolved.conf
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+#
+# Entries in this file show the compile time defaults.
+# You can change settings by editing this file.
+# Defaults can be restored by simply deleting this file.
+#
+# See resolved.conf(5) for details
+
+[Resolve]
+DNS=127.0.0.2
+#FallbackDNS=
+#Domains=
+#LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#Cache=yes
+#DNSStubListener=yes
+vagrant@app01:/etc$
+```
+
+The important thing from above is the line `DNS=127.0.0.2`. This is telling
+`systemd-resolved` to forward all lookups to `127.0.0.2` which is what IP
+`Dnsmasq` is bound to.
+
+And if we take a quick look at `/etc/dnsmasq.conf` we can verify that is correct
+as well.
+
+```bash
+cat /etc/dnsmasq.conf
+...
+vagrant@app01:~$ cat /etc/dnsmasq.conf
+bind-interfaces
+port=53
+listen-address=127.0.0.2
+server=/consul/127.0.0.1#8600
+
+# Uncomment and modify as appropriate to enable reverse DNS lookups for
+# common netblocks found in RFC 1918, 5735, and 6598:
+#rev-server=0.0.0.0/8,127.0.0.1#8600
+#rev-server=10.0.0.0/8,127.0.0.1#8600
+#rev-server=100.64.0.0/10,127.0.0.1#8600
+#rev-server=127.0.0.1/8,127.0.0.1#8600
+#rev-server=169.254.0.0/16,127.0.0.1#8600
+#rev-server=172.16.0.0/12,127.0.0.1#8600
+#rev-server=192.168.0.0/16,127.0.0.1#8600
+#rev-server=224.0.0.0/4,127.0.0.1#8600
+#rev-server=240.0.0.0/4,127.0.0.1#8600
+vagrant@app01:~$
+```
+
+And as you can see, we have configured `listen-address=127.0.0.2` and `bind-interfaces` to ensure that Dnsmasq only listens on that IP. We have also
+added `server=/consul/127.0.0.1#8600` which tells Dnsmasq to forward all `consul`
+domains to thee local Consul client's DNS port(8600).
+
+Now let's verify that our DNS resolution is working properly to find registered
+services in Consul.
+
+```bash
+dig consul.service.dc1.consul
+...
+vagrant@app01:~$ dig consul.service.dc1.consul
+
+; <<>> DiG 9.11.3-1ubuntu1.11-Ubuntu <<>> consul.service.dc1.consul
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 5645
+;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;consul.service.dc1.consul.	IN	A
+
+;; ANSWER SECTION:
+consul.service.dc1.consul. 0	IN	A	192.168.250.13
+consul.service.dc1.consul. 0	IN	A	192.168.250.12
+consul.service.dc1.consul. 0	IN	A	192.168.250.11
+
+;; Query time: 2 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Sun Jul 19 06:06:08 UTC 2020
+;; MSG SIZE  rcvd: 102
+
+vagrant@app01:~$
+```
+
+```bash
+dig web.service.dc1.consul
+...
+vagrant@app01:~$ dig web.service.dc1.consul
+
+; <<>> DiG 9.11.3-1ubuntu1.11-Ubuntu <<>> web.service.dc1.consul
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 56917
+;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;web.service.dc1.consul.		IN	A
+
+;; ANSWER SECTION:
+web.service.dc1.consul.	0	IN	A	192.168.250.33
+web.service.dc1.consul.	0	IN	A	192.168.250.32
+web.service.dc1.consul.	0	IN	A	192.168.250.31
+
+;; Query time: 3 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Sun Jul 19 06:07:02 UTC 2020
+;; MSG SIZE  rcvd: 99
+
+vagrant@app01:~$
+```
+
+Feel free to jump around to other servers to ensure they are functional as well.
+
+Stay tuned for more on this topic soon.
 
 ## Halting Environment
 

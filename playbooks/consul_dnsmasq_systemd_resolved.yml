@@ -1,0 +1,81 @@
+---
+# This playbook will do the following:
+# Configure systemd-resolved to forward to Dnsmasq 127.0.0.2
+# Install Dnsmasq
+# Configure Dnsmasq to bind on 127.0.0.2:53
+# Configure Dnsmasq to forward consul domain to Consul client on port 8600
+
+- hosts: all
+  handlers:
+    - name: reload dnsmasq
+      systemd:
+        daemon_reload: true
+      become: true
+
+    - name: restart dnsmasq
+      service:
+        name: dnsmasq
+        state: restarted
+        enabled: true
+        daemon_reload: true
+      become: true
+
+    - name: restart systemd-resolved
+      service:
+        name: systemd-resolved
+        state: restarted
+        enabled: true
+      become: true
+
+  tasks:
+    - name: Update /etc/systemd/resolved.conf
+      lineinfile:
+        path: /etc/systemd/resolved.conf
+        regexp: "^#DNS="
+        line: DNS=127.0.0.2
+      become: true
+      notify:
+        - restart systemd-resolved
+
+    - name: Install Dnsmasq
+      apt:
+        name: dnsmasq
+        state: present
+      become: true
+
+    - name: Configuring Dnsmasq
+      copy:
+        content: |
+          bind-interfaces
+          port=53
+          listen-address=127.0.0.2
+          server=/consul/127.0.0.1#8600
+
+          # Uncomment and modify as appropriate to enable reverse DNS lookups for
+          # common netblocks found in RFC 1918, 5735, and 6598:
+          #rev-server=0.0.0.0/8,127.0.0.1#8600
+          #rev-server=10.0.0.0/8,127.0.0.1#8600
+          #rev-server=100.64.0.0/10,127.0.0.1#8600
+          #rev-server=127.0.0.1/8,127.0.0.1#8600
+          #rev-server=169.254.0.0/16,127.0.0.1#8600
+          #rev-server=172.16.0.0/12,127.0.0.1#8600
+          #rev-server=192.168.0.0/16,127.0.0.1#8600
+          #rev-server=224.0.0.0/4,127.0.0.1#8600
+          #rev-server=240.0.0.0/4,127.0.0.1#8600
+        dest: /etc/dnsmasq.conf
+      become: true
+      notify:
+        - reload dnsmasq
+        - restart dnsmasq
+
+    - name: Configuring /etc/default/dnsmasq
+      copy:
+        content: |
+          CONFIG_DIR=/etc/dnsmasq.d,.dpkg-dist,.dpkg-old,.dpkg-new
+          ENABLED=1
+          IGNORE_RESOLVCONF=yes
+        dest: /etc/default/dnsmasq
+      become: true
+      notify:
+        - reload dnsmasq
+        - restart dnsmasq
