@@ -1,0 +1,834 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+    
+    
+      
+        <title>06. Consul - Cluster - Hashi Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.fe0cca5b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#06-consul-cluster" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Hashi Learning" class="md-header-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Hashi Learning
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              06. Consul - Cluster
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Hashi Learning" class="md-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Hashi Learning
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Hashi Learning" class="md-nav__link">
+      Hashi Learning
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../01_Getting_Started/" title="01. Getting Started" class="md-nav__link">
+      01. Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../02_Packer/" title="02. Packer" class="md-nav__link">
+      02. Packer
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../03_Vagrant/" title="03. Vagrant" class="md-nav__link">
+      03. Vagrant
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../04_Scenarios/" title="04. Scenarios" class="md-nav__link">
+      04. Scenarios
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../05_Consul/" title="05. Consul - Single Node" class="md-nav__link">
+      05. Consul - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        06. Consul - Cluster
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="06. Consul - Cluster" class="md-nav__link md-nav__link--active">
+      06. Consul - Cluster
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    CLI
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli-configuration" class="md-nav__link">
+    CLI - Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-nodes" class="md-nav__link">
+    CLI - Nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-datacenter-members" class="md-nav__link">
+    CLI - Datacenter Members
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-services" class="md-nav__link">
+    UI - Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-nodes" class="md-nav__link">
+    UI - Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tearing-down" class="md-nav__link">
+    Tearing Down
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../07_Consul_Service_Discovery_HAProxy/" title="07. Consul - Service Discovery with HAProxy" class="md-nav__link">
+      07. Consul - Service Discovery with HAProxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../08_Consul_NGINX_Reverse_Proxy/" title="08. Consul - NGINX Reverse Proxy" class="md-nav__link">
+      08. Consul - NGINX Reverse Proxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../09_Vault/" title="09. Vault - Single Node" class="md-nav__link">
+      09. Vault - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../10_Vault_HA/" title="10. Vault - HA" class="md-nav__link">
+      10. Vault - HA
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    CLI
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli-configuration" class="md-nav__link">
+    CLI - Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-nodes" class="md-nav__link">
+    CLI - Nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-datacenter-members" class="md-nav__link">
+    CLI - Datacenter Members
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-services" class="md-nav__link">
+    UI - Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-nodes" class="md-nav__link">
+    UI - Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tearing-down" class="md-nav__link">
+    Tearing Down
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="06-consul-cluster">06. Consul - Cluster</h1>
+<p>In this scenario, we will build upon a single Consul server and move onto
+setting up a three node Consul cluster.</p>
+<blockquote>
+<p>NOTE: For most of this setup, we will only cover the differences from our
+single node Consul server. Feel free to jump to <a href="../05_Consul/">03. Consul</a> to
+go through anything we covered previously.</p>
+</blockquote>
+<h2 id="spinning-up">Spinning Up</h2>
+<p>First we need to export our scenario configuration for Vagrant:</p>
+<pre><code class="bash">export SCENARIO=scenarios/consul_cluster.yml
+</code></pre>
+
+<p>Now that we've exported our scenario configuration, we are ready to spin up
+our environment:</p>
+<pre><code class="bash">vagrant up
+</code></pre>
+
+<p>And off we go! You will see a lot going on here as Vagrant and Ansible do their
+job.</p>
+<pre><code class="bash">▶ vagrant up
+Bringing machine 'consul01' up with 'virtualbox' provider...
+Bringing machine 'consul02' up with 'virtualbox' provider...
+Bringing machine 'consul03' up with 'virtualbox' provider...
+...
+PLAY RECAP *********************************************************************
+consul01                   : ok=30   changed=13   unreachable=0    failed=0    skipped=22   rescued=0    ignored=0
+consul02                   : ok=30   changed=13   unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+consul03                   : ok=30   changed=13   unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+</code></pre>
+
+<p>And once everything completes, we will have a fully functional three node
+Consul cluster.</p>
+<p>This scenario has the following nodes when completed.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Node</th>
+<th align="center">IP #1</th>
+<th align="center">IP #2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">consul01</td>
+<td align="center">192.168.250.11</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">consul02</td>
+<td align="center">192.168.250.12</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">consul03</td>
+<td align="center">192.168.250.13</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cli">CLI</h2>
+<p>Now we are ready to begin exploring our Consul cluster using the CLI. So, to do
+this. Let's SSH into any one of our nodes <code>consul0[1-3]</code>.</p>
+<pre><code class="bash">vagrant ssh consul01
+</code></pre>
+
+<pre><code class="bash">▶ vagrant ssh consul01
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-76-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+Last login: Mon Jul 20 22:37:48 2020 from 192.168.250.1
+vagrant@consul01:~$
+</code></pre>
+
+<p>Now that we've logged in, let's change into the <code>/etc/consul.d</code> directory and
+see what files/directories are present.</p>
+<pre><code class="bash">cd /etc/consul.d
+ls -la
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:~$ cd /etc/consul.d
+vagrant@consul01:/etc/consul.d$ ls -la
+total 20
+drwxr-xr-x  4 root root 4096 Jul 20 22:37 .
+drwxr-xr-x 79 root root 4096 Jul 20 22:37 ..
+drwxr-xr-x  2 root root 4096 Jul 20 22:37 client
+-rw-r--r--  1 root root  898 Jul 20 22:37 config.json
+drwxr-xr-x  2 root root 4096 Jul 20 22:37 scripts
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-configuration">CLI - Configuration</h3>
+<p>As we can see from above, our files and directories look identical to our single
+node Consul server. However, let's take a look at our <code>config.json</code> file.</p>
+<pre><code class="bash">cat config.json
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ cat config.json
+{
+    &quot;acl&quot;: {
+        &quot;default_policy&quot;: &quot;allow&quot;,
+        &quot;down_policy&quot;: &quot;extend-cache&quot;,
+        &quot;tokens&quot;: {
+            &quot;agent&quot;: &quot;&quot;,
+            &quot;agent_master&quot;: &quot;&quot;,
+            &quot;default&quot;: &quot;&quot;,
+            &quot;master&quot;: &quot;6DA12E0F-D8A5-48C5-AEFF-00D50E84D01A&quot;,
+            &quot;replication&quot;: &quot;&quot;
+        }
+    },
+    &quot;bind_addr&quot;: &quot;192.168.250.11&quot;,
+    &quot;bootstrap_expect&quot;: 3,
+    &quot;client_addr&quot;: &quot;0.0.0.0&quot;,
+    &quot;data_dir&quot;: &quot;/var/consul&quot;,
+    &quot;datacenter&quot;: &quot;dc1&quot;,
+    &quot;dns_config&quot;: {},
+    &quot;enable_acl_replication&quot;: false,
+    &quot;enable_syslog&quot;: true,
+    &quot;encrypt&quot;: &quot;WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=&quot;,
+    &quot;log_level&quot;: &quot;DEBUG&quot;,
+    &quot;node_name&quot;: &quot;consul01&quot;,
+    &quot;performance&quot;: {},
+    &quot;primary_datacenter&quot;: &quot;dc1&quot;,
+    &quot;retry_join&quot;: [
+        &quot;192.168.250.11&quot;,
+        &quot;192.168.250.12&quot;,
+        &quot;192.168.250.13&quot;
+    ],
+    &quot;retry_join_wan&quot;: [],
+    &quot;server&quot;: true,
+    &quot;telemetry&quot;: {},
+    &quot;ui&quot;: true
+}
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>This configuration looks very much the same as our single node with the
+exception of: <code>bootstrap_expect</code> and <code>retry_join</code>. If you were to compare to
+our <a href="../05_Consul/#cli-configuration">single node configuration</a> you would see
+that these two settings are indeed different. How?</p>
+<h3 id="cli-nodes">CLI - Nodes</h3>
+<p>Next, let's get a list of nodes available:</p>
+<pre><code class="bash">consul catalog nodes
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul catalog nodes
+Node      ID        Address         DC
+consul01  b70ec734  192.168.250.11  dc1
+consul02  156f0b03  192.168.250.12  dc1
+consul03  6040c3c2  192.168.250.13  dc1
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>And as we did previously, let's get a more detailed view of our catalog nodes.</p>
+<pre><code class="bash">consul catalog nodes --detailed
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul catalog nodes --detailed
+Node      ID                                    Address         DC   TaggedAddresses                                                                           Meta
+consul01  b70ec734-8639-0a6b-cc95-8a71b63fb776  192.168.250.11  dc1  lan=192.168.250.11, lan_ipv4=192.168.250.11, wan=192.168.250.11, wan_ipv4=192.168.250.11  consul-network-segment=
+consul02  156f0b03-33db-7dfc-bb5b-3c682e51a815  192.168.250.12  dc1  lan=192.168.250.12, lan_ipv4=192.168.250.12, wan=192.168.250.12, wan_ipv4=192.168.250.12  consul-network-segment=
+consul03  6040c3c2-b2f8-c17e-ca75-873e83cb6455  192.168.250.13  dc1  lan=192.168.250.13, lan_ipv4=192.168.250.13, wan=192.168.250.13, wan_ipv4=192.168.250.13  consul-network-segment=
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>Let's also use <code>curl</code> to get a detailed view here as well.</p>
+<pre><code class="bash">curl --silent http://127.0.0.1:8500/v1/catalog/nodes | jq
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ curl --silent http://127.0.0.1:8500/v1/catalog/nodes | jq
+[
+  {
+    &quot;ID&quot;: &quot;b70ec734-8639-0a6b-cc95-8a71b63fb776&quot;,
+    &quot;Node&quot;: &quot;consul01&quot;,
+    &quot;Address&quot;: &quot;192.168.250.11&quot;,
+    &quot;Datacenter&quot;: &quot;dc1&quot;,
+    &quot;TaggedAddresses&quot;: {
+      &quot;lan&quot;: &quot;192.168.250.11&quot;,
+      &quot;lan_ipv4&quot;: &quot;192.168.250.11&quot;,
+      &quot;wan&quot;: &quot;192.168.250.11&quot;,
+      &quot;wan_ipv4&quot;: &quot;192.168.250.11&quot;
+    },
+    &quot;Meta&quot;: {
+      &quot;consul-network-segment&quot;: &quot;&quot;
+    },
+    &quot;CreateIndex&quot;: 7,
+    &quot;ModifyIndex&quot;: 9
+  },
+  {
+    &quot;ID&quot;: &quot;156f0b03-33db-7dfc-bb5b-3c682e51a815&quot;,
+    &quot;Node&quot;: &quot;consul02&quot;,
+    &quot;Address&quot;: &quot;192.168.250.12&quot;,
+    &quot;Datacenter&quot;: &quot;dc1&quot;,
+    &quot;TaggedAddresses&quot;: {
+      &quot;lan&quot;: &quot;192.168.250.12&quot;,
+      &quot;lan_ipv4&quot;: &quot;192.168.250.12&quot;,
+      &quot;wan&quot;: &quot;192.168.250.12&quot;,
+      &quot;wan_ipv4&quot;: &quot;192.168.250.12&quot;
+    },
+    &quot;Meta&quot;: {
+      &quot;consul-network-segment&quot;: &quot;&quot;
+    },
+    &quot;CreateIndex&quot;: 5,
+    &quot;ModifyIndex&quot;: 8
+  },
+  {
+    &quot;ID&quot;: &quot;6040c3c2-b2f8-c17e-ca75-873e83cb6455&quot;,
+    &quot;Node&quot;: &quot;consul03&quot;,
+    &quot;Address&quot;: &quot;192.168.250.13&quot;,
+    &quot;Datacenter&quot;: &quot;dc1&quot;,
+    &quot;TaggedAddresses&quot;: {
+      &quot;lan&quot;: &quot;192.168.250.13&quot;,
+      &quot;lan_ipv4&quot;: &quot;192.168.250.13&quot;,
+      &quot;wan&quot;: &quot;192.168.250.13&quot;,
+      &quot;wan_ipv4&quot;: &quot;192.168.250.13&quot;
+    },
+    &quot;Meta&quot;: {
+      &quot;consul-network-segment&quot;: &quot;&quot;
+    },
+    &quot;CreateIndex&quot;: 6,
+    &quot;ModifyIndex&quot;: 10
+  }
+]
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-datacenter-members">CLI - Datacenter Members</h3>
+<p>To get a list of Consul datacenter members, we can simply execute:</p>
+<pre><code class="bash">consul members list
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul members list
+Node      Address              Status  Type    Build  Protocol  DC   Segment
+consul01  192.168.250.11:8301  alive   server  1.7.2  2         dc1  &lt;all&gt;
+consul02  192.168.250.12:8301  alive   server  1.7.2  2         dc1  &lt;all&gt;
+consul03  192.168.250.13:8301  alive   server  1.7.2  2         dc1  &lt;all&gt;
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="ui-services">UI - Services</h3>
+<p>Click on services and you'll see we only have one service currently in Consul,
+which will look like below.</p>
+<p><img alt="Consul UI - Services" src="../2020-07-20-23-06-54.png" /></p>
+<p>And if you click on the <code>Consul</code> service to dig in further, you'll see a bit
+of information on our <code>Consul</code> service.</p>
+<p><img alt="Consul UI - Services - Consul" src="../2020-07-20-23-07-33.png" /></p>
+<h3 id="ui-nodes">UI - Nodes</h3>
+<p>Next, let's click on nodes and we <strong>SHOULD</strong> now see our three nodes.</p>
+<p><img alt="Consul UI - Node" src="../2020-07-20-23-09-21.png" /></p>
+<blockquote>
+<p>NOTE: At this point everything else <strong>SHOULD</strong> work the exact same as it did
+with our single node Consul server. And as mentioned previously, feel free to
+explore those different things we did in <a href="../05_Consul/">03. Consul</a>.</p>
+</blockquote>
+<h2 id="tearing-down">Tearing Down</h2>
+<p>After you've explored a Consul cluster setup. You'll likely be ready to move
+onto more advanced scenarios. So, just as we did when spinning up. We can quickly
+tear everything down.</p>
+<pre><code class="bash">./scripts/cleanup.sh
+</code></pre>
+
+<pre><code class="bash">▶ ./scripts/cleanup.sh
+==&gt; consul03: Forcing shutdown of VM...
+==&gt; consul03: Destroying VM and associated drives...
+==&gt; consul02: Forcing shutdown of VM...
+==&gt; consul02: Destroying VM and associated drives...
+==&gt; consul01: Forcing shutdown of VM...
+==&gt; consul01: Destroying VM and associated drives...
+(venv)
+</code></pre>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../05_Consul/" title="05. Consul - Single Node" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                05. Consul - Single Node
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../07_Consul_Service_Discovery_HAProxy/" title="07. Consul - Service Discovery with HAProxy" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                07. Consul - Service Discovery with HAProxy
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.a68abb33.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

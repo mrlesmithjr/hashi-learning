@@ -1,0 +1,805 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+    
+    
+      
+        <title>07. Consul - Service Discovery with HAProxy - Hashi Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.fe0cca5b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#07-consul-service-discovery-with-haproxy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Hashi Learning" class="md-header-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Hashi Learning
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              07. Consul - Service Discovery with HAProxy
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Hashi Learning" class="md-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Hashi Learning
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Hashi Learning" class="md-nav__link">
+      Hashi Learning
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../01_Getting_Started/" title="01. Getting Started" class="md-nav__link">
+      01. Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../02_Packer/" title="02. Packer" class="md-nav__link">
+      02. Packer
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../03_Vagrant/" title="03. Vagrant" class="md-nav__link">
+      03. Vagrant
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../04_Scenarios/" title="04. Scenarios" class="md-nav__link">
+      04. Scenarios
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../05_Consul/" title="05. Consul - Single Node" class="md-nav__link">
+      05. Consul - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../06_Consul_Cluster/" title="06. Consul - Cluster" class="md-nav__link">
+      06. Consul - Cluster
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        07. Consul - Service Discovery with HAProxy
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="07. Consul - Service Discovery with HAProxy" class="md-nav__link md-nav__link--active">
+      07. Consul - Service Discovery with HAProxy
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+    <nav class="md-nav" aria-label="Spinning Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haproxy-service-discovery" class="md-nav__link">
+    HAProxy Service Discovery
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-servers" class="md-nav__link">
+    App Servers
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../08_Consul_NGINX_Reverse_Proxy/" title="08. Consul - NGINX Reverse Proxy" class="md-nav__link">
+      08. Consul - NGINX Reverse Proxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../09_Vault/" title="09. Vault - Single Node" class="md-nav__link">
+      09. Vault - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../10_Vault_HA/" title="10. Vault - HA" class="md-nav__link">
+      10. Vault - HA
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+    <nav class="md-nav" aria-label="Spinning Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haproxy-service-discovery" class="md-nav__link">
+    HAProxy Service Discovery
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-servers" class="md-nav__link">
+    App Servers
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="07-consul-service-discovery-with-haproxy">07. Consul - Service Discovery with HAProxy</h1>
+<p>In this scenario, we will be spinning up the following: a single Consul node,
+three app servers, and a load balancer.</p>
+<blockquote>
+<p>NOTE: This scenario was borrowed from <a href="https://learn.hashicorp.com/consul/integrations/haproxy-consul">https://learn.hashicorp.com/consul/integrations/haproxy-consul</a>. However, we've automated the whole process.</p>
+</blockquote>
+<h2 id="spinning-up">Spinning Up</h2>
+<p>First we need to export our scenario configuration for Vagrant:</p>
+<pre><code class="bash">export SCENARIO=scenarios/consul_service_discovery_haproxy.yml
+</code></pre>
+
+<p>Now that we've exported our scenario configuration, we are ready to spin up
+our environment:</p>
+<pre><code class="bash">vagrant up
+</code></pre>
+
+<p>And off we go! You will see a lot going on here as Vagrant and Ansible do their
+job.</p>
+<pre><code class="bash">▶ vagrant up
+Bringing machine 'consul01' up with 'virtualbox' provider...
+Bringing machine 'app01' up with 'virtualbox' provider...
+Bringing machine 'app02' up with 'virtualbox' provider...
+Bringing machine 'app03' up with 'virtualbox' provider...
+Bringing machine 'lb01' up with 'virtualbox' provider...
+...
+PLAY RECAP *********************************************************************
+app01                      : ok=51   changed=27   unreachable=0    failed=0    skipped=28   rescued=0    ignored=0
+app02                      : ok=51   changed=27   unreachable=0    failed=0    skipped=28   rescued=0    ignored=0
+app03                      : ok=51   changed=27   unreachable=0    failed=0    skipped=28   rescued=0    ignored=0
+consul01                   : ok=38   changed=19   unreachable=0    failed=0    skipped=22   rescued=0    ignored=0
+lb01                       : ok=54   changed=30   unreachable=0    failed=0    skipped=10   rescued=0    ignored=0
+</code></pre>
+
+<p>And once everything completes, we will have a fully functional Consul service discovery with HAProxy.</p>
+<h3 id="nodes">Nodes</h3>
+<p>This scenario has the following nodes when completed.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Node</th>
+<th align="center">IP #1</th>
+<th align="center">IP #2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">consul01</td>
+<td align="center">192.168.250.11</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">app01</td>
+<td align="center">192.168.250.21</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">app02</td>
+<td align="center">192.168.250.22</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">app03</td>
+<td align="center">192.168.250.23</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">lb01</td>
+<td align="center">192.168.250.101</td>
+<td align="center">192.168.250.201</td>
+</tr>
+</tbody>
+</table>
+<h2 id="haproxy-service-discovery">HAProxy Service Discovery</h2>
+<p>To get a quick view of the HAProxy admin stats page, head over
+<a href="http://192.168.250.101:9090/">here</a> and login with <code>admin:admin</code>.</p>
+<p><img alt="HAProxy admin stats" src="../2020-07-21-16-06-57.png" /></p>
+<p>And as you can see, we have some web servers up, running and fully integrated
+with Consul using service discovery.</p>
+<p>Let's quickly SSH into our HAProxy server and take a look at the Consul and
+HAProxy configurations.</p>
+<pre><code class="bash">vagrant ssh lb01
+</code></pre>
+
+<pre><code class="bash">▶ vagrant ssh lb01
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-76-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+ * &quot;If you've been waiting for the perfect Kubernetes dev solution for
+   macOS, the wait is over. Learn how to install Microk8s on macOS.&quot;
+
+   https://www.techrepublic.com/article/how-to-install-microk8s-on-macos/
+Last login: Tue Jul 21 20:00:52 2020 from 192.168.250.1
+vagrant@lb01:~$
+</code></pre>
+
+<p>Now that we've logged in, let's change to the <code>/etc/consul.d/client</code> directory.</p>
+<pre><code class="bash">cd /etc/consul.d/client
+</code></pre>
+
+<p>Next let's look at the Consul client configuration.</p>
+<pre><code class="bash">cat config.json
+</code></pre>
+
+<pre><code class="bash">vagrant@lb01:/etc/consul.d/client$ cat config.json
+{
+    &quot;bind_addr&quot;: &quot;192.168.250.101&quot;,
+    &quot;client_addr&quot;: &quot;0.0.0.0&quot;,
+    &quot;data_dir&quot;: &quot;/var/consul/data&quot;,
+    &quot;datacenter&quot;: &quot;dc1&quot;,
+    &quot;enable_script_checks&quot;: true,
+    &quot;enable_syslog&quot;: true,
+    &quot;encrypt&quot;: &quot;WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=&quot;,
+    &quot;log_level&quot;: &quot;DEBUG&quot;,
+    &quot;node_name&quot;: &quot;lb01&quot;,
+    &quot;retry_join&quot;: [
+        &quot;192.168.250.11&quot;
+    ],
+    &quot;server&quot;: false,
+    &quot;ui&quot;: true
+}
+vagrant@lb01:/etc/consul.d/client$
+</code></pre>
+
+<p>And as you can see in the above configuration, we are using Consul as a client
+rather than a server (<code>"server": false</code>).</p>
+<p>Next let's change to the <code>/etc/haproxy</code> directory and look at our HAProxy
+configuration.</p>
+<pre><code class="bash">cd /etc/haproxy
+cat haproxy.cfg
+</code></pre>
+
+<pre><code class="bash">vagrant@lb01:/etc/haproxy$ cat haproxy.cfg
+#
+# Ansible managed
+#
+
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+    chroot /var/lib/haproxy
+    group haproxy
+    maxconn 40000
+    spread-checks 3
+    stats socket /var/run/haproxy.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    # Default SSL material locations
+    ca-base /etc/ssl/certs
+    crt-base /etc/ssl/private
+
+    # Default ciphers to use on SSL-enabled listening sockets.
+    # For more information, see ciphers(1SSL).
+    ssl-default-bind-ciphers kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL
+    ssl-default-bind-options no-sslv3
+
+defaults
+    log global
+    maxconn 40000
+    mode tcp
+    option dontlognull
+    option redispatch
+    option tcp-smart-accept
+    option tcp-smart-connect
+    option tcplog
+    retries 3
+    timeout client 50000
+    timeout connect 50000
+    timeout queue 5000
+    timeout server 50000
+
+userlist STATSUSERS
+    group admin users admin
+    user admin insecure-password admin
+
+frontend stats
+    acl AuthOkay_ReadOnly http_auth(STATSUSERS)
+    acl AuthOkay_Admin http_auth_group(STATSUSERS) admin
+    bind *:9090
+    mode http
+    stats enable
+    stats http-request auth realm stats unless AuthOkay_ReadOnly
+    stats refresh 10s
+    stats show-legends
+    stats uri /
+
+frontend http_front-80
+    bind 192.168.250.101:80
+    default_backend http_back
+
+backend http_back
+
+    balance roundrobin
+    server-template mywebapp 10 _web._tcp.service.consul resolvers consul resolve-opts allow-dup-ip resolve-prefer ipv4 check
+
+resolvers consul
+  nameserver consul 127.0.0.1:8600
+  accepted_payload_size 8192
+  hold valid 5s
+vagrant@lb01:/etc/haproxy$
+</code></pre>
+
+<p>Now looking at this configuration, the real magic is happening within the
+following two blocks:</p>
+<pre><code class="bash">backend http_back
+
+    balance roundrobin
+    server-template mywebapp 10 _web._tcp.service.consul resolvers consul resolve-opts allow-dup-ip resolve-prefer ipv4 check
+</code></pre>
+
+<p>The above block is defining the <code>server-template</code> which is used to perform the
+service discovery within our Consul cluster. The template is telling HAProxy
+to discover the <code>web</code> services that are registered in Consul using the <code>consul</code>
+resolver as defined below. To do the DNS discovery for us and return the results
+back to HAProxy.</p>
+<pre><code class="bash">resolvers consul
+  nameserver consul 127.0.0.1:8600
+  accepted_payload_size 8192
+  hold valid 5s
+</code></pre>
+
+<h2 id="app-servers">App Servers</h2>
+<p>We have also spun up three app servers with our stack. These servers will over
+time provide us many different services in which we will use for learning. But
+for now, the following list is what they provide:</p>
+<ul>
+<li>NGINX: HTTP</li>
+</ul>
+<blockquote>
+<p>NOTE: SSH to any one of <code>app[01-03]</code>.</p>
+</blockquote>
+<p>These servers are also running the Consul client which is configured as below:</p>
+<pre><code class="bash">vagrant ssh app01
+</code></pre>
+
+<pre><code class="bash">cd /etc/consul.d/client
+cat config.json
+</code></pre>
+
+<pre><code class="bash">vagrant@app01:/etc/consul.d/client$ cat config.json
+{
+    &quot;bind_addr&quot;: &quot;192.168.250.31&quot;,
+    &quot;client_addr&quot;: &quot;0.0.0.0&quot;,
+    &quot;data_dir&quot;: &quot;/var/consul/data&quot;,
+    &quot;datacenter&quot;: &quot;dc1&quot;,
+    &quot;enable_script_checks&quot;: true,
+    &quot;enable_syslog&quot;: true,
+    &quot;encrypt&quot;: &quot;WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=&quot;,
+    &quot;log_level&quot;: &quot;DEBUG&quot;,
+    &quot;node_name&quot;: &quot;app01&quot;,
+    &quot;retry_join&quot;: [
+        &quot;192.168.250.11&quot;
+    ],
+    &quot;server&quot;: false,
+    &quot;ui&quot;: true
+}
+vagrant@app01:/etc/consul.d/client$
+</code></pre>
+
+<p>And once again, we <strong>SHOULD</strong> notice that our Consul client configuration is
+identical to our HAProxy server.</p>
+<p>Our Consul services that we are registering, are being done using Ansible. The
+following shows how that is accomplished for us. We could also do this creating
+Consul client configurations on our app servers, but we've chosen to use Ansible.</p>
+<p><code>group_vars/app_servers/consul.yml</code></p>
+<pre><code class="yaml">---
+# Define Consul services for app servers
+consul_services:
+  - name: grafana
+    port: 3000
+    script: curl --silent http://localhost:3000/api/health
+    interval: 3s
+    state: present
+  - name: web
+    port: 80
+    script: curl --silent http://localhost
+    interval: 3s
+    state: present
+</code></pre>
+
+<p><code>playbooks/app_servers.yml</code></p>
+<pre><code class="yaml">- hosts: app_servers
+  tasks:
+    - name: Manage Consul Services
+      consul:
+        service_name: &quot;{{ item.name }}&quot;
+        service_port: &quot;{{ item.port }}&quot;
+        script: &quot;{{ item.script|default(omit) }}&quot;
+        interval: &quot;{{ item.interval|default(omit) }}&quot;
+        state: &quot;{{ item.state|default(omit) }}&quot;
+      become: true
+      loop: &quot;{{ consul_services }}&quot;
+</code></pre>
+
+<p>And to prove that they are working correctly through our HAProxy load balancer,
+simply browse to <a href="http://192.168.250.101">http://192.168.250.101</a>.</p>
+<p><img alt="NGINX-HAProxy" src="../2020-07-21-16-21-03.png" /></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../06_Consul_Cluster/" title="06. Consul - Cluster" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                06. Consul - Cluster
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../08_Consul_NGINX_Reverse_Proxy/" title="08. Consul - NGINX Reverse Proxy" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                08. Consul - NGINX Reverse Proxy
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.a68abb33.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

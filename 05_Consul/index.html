@@ -1,0 +1,1582 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+    
+    
+      
+        <title>05. Consul - Single Node - Hashi Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.fe0cca5b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#05-consul-single-node" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Hashi Learning" class="md-header-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Hashi Learning
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              05. Consul - Single Node
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Hashi Learning" class="md-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Hashi Learning
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Hashi Learning" class="md-nav__link">
+      Hashi Learning
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../01_Getting_Started/" title="01. Getting Started" class="md-nav__link">
+      01. Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../02_Packer/" title="02. Packer" class="md-nav__link">
+      02. Packer
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../03_Vagrant/" title="03. Vagrant" class="md-nav__link">
+      03. Vagrant
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../04_Scenarios/" title="04. Scenarios" class="md-nav__link">
+      04. Scenarios
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        05. Consul - Single Node
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="05. Consul - Single Node" class="md-nav__link md-nav__link--active">
+      05. Consul - Single Node
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+    <nav class="md-nav" aria-label="Spinning Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    CLI
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli-configuration" class="md-nav__link">
+    CLI - Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-datacenters" class="md-nav__link">
+    CLI - Datacenters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-services" class="md-nav__link">
+    CLI - Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-nodes" class="md-nav__link">
+    CLI - Nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-datacenter-members" class="md-nav__link">
+    CLI - Datacenter Members
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui" class="md-nav__link">
+    UI
+  </a>
+  
+    <nav class="md-nav" aria-label="UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ui-services" class="md-nav__link">
+    UI - Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-nodes" class="md-nav__link">
+    UI - Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dns" class="md-nav__link">
+    DNS
+  </a>
+  
+    <nav class="md-nav" aria-label="DNS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dns-node-lookups" class="md-nav__link">
+    DNS - Node Lookups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dns-service-lookups" class="md-nav__link">
+    DNS - Service Lookups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dns-systemd-resolved" class="md-nav__link">
+    DNS - systemd-resolved
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kv-store" class="md-nav__link">
+    KV Store
+  </a>
+  
+    <nav class="md-nav" aria-label="KV Store">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples" class="md-nav__link">
+    KV Store - Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples-put" class="md-nav__link">
+    KV Store - Examples - Put
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples-get" class="md-nav__link">
+    KV Store - Examples - Get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples-delete" class="md-nav__link">
+    KV Store - Examples - Delete
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tearing-down" class="md-nav__link">
+    Tearing Down
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../06_Consul_Cluster/" title="06. Consul - Cluster" class="md-nav__link">
+      06. Consul - Cluster
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../07_Consul_Service_Discovery_HAProxy/" title="07. Consul - Service Discovery with HAProxy" class="md-nav__link">
+      07. Consul - Service Discovery with HAProxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../08_Consul_NGINX_Reverse_Proxy/" title="08. Consul - NGINX Reverse Proxy" class="md-nav__link">
+      08. Consul - NGINX Reverse Proxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../09_Vault/" title="09. Vault - Single Node" class="md-nav__link">
+      09. Vault - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../10_Vault_HA/" title="10. Vault - HA" class="md-nav__link">
+      10. Vault - HA
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+    <nav class="md-nav" aria-label="Spinning Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli" class="md-nav__link">
+    CLI
+  </a>
+  
+    <nav class="md-nav" aria-label="CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cli-configuration" class="md-nav__link">
+    CLI - Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-datacenters" class="md-nav__link">
+    CLI - Datacenters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-services" class="md-nav__link">
+    CLI - Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-nodes" class="md-nav__link">
+    CLI - Nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-datacenter-members" class="md-nav__link">
+    CLI - Datacenter Members
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui" class="md-nav__link">
+    UI
+  </a>
+  
+    <nav class="md-nav" aria-label="UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ui-services" class="md-nav__link">
+    UI - Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ui-nodes" class="md-nav__link">
+    UI - Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dns" class="md-nav__link">
+    DNS
+  </a>
+  
+    <nav class="md-nav" aria-label="DNS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dns-node-lookups" class="md-nav__link">
+    DNS - Node Lookups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dns-service-lookups" class="md-nav__link">
+    DNS - Service Lookups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dns-systemd-resolved" class="md-nav__link">
+    DNS - systemd-resolved
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kv-store" class="md-nav__link">
+    KV Store
+  </a>
+  
+    <nav class="md-nav" aria-label="KV Store">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples" class="md-nav__link">
+    KV Store - Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples-put" class="md-nav__link">
+    KV Store - Examples - Put
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples-get" class="md-nav__link">
+    KV Store - Examples - Get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-store-examples-delete" class="md-nav__link">
+    KV Store - Examples - Delete
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tearing-down" class="md-nav__link">
+    Tearing Down
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="05-consul-single-node">05. Consul - Single Node</h1>
+<p>In this scenario, we will simply spin up a single node Consul server which will
+provide us a learning environment to get familiar with basic Consul concepts.</p>
+<h2 id="spinning-up">Spinning Up</h2>
+<p>First we need to export our scenario configuration for Vagrant:</p>
+<pre><code class="bash">export SCENARIO=scenarios/consul.yml
+</code></pre>
+
+<p>Now that we've exported our scenario configuration, we are ready to spin up
+our environment:</p>
+<pre><code class="bash">vagrant up
+</code></pre>
+
+<p>And off we go! You will see a lot going on here as Vagrant and Ansible do their
+job.</p>
+<pre><code class="bash">▶ vagrant up
+Bringing machine 'consul01' up with 'virtualbox' provider...
+...
+PLAY RECAP *********************************************************************
+consul01                   : ok=30   changed=13   unreachable=0    failed=0    skipped=22   rescued=0    ignored=0
+</code></pre>
+
+<p>And once all of the provisioning finishes, we will have a single node Consul
+server ready for us to explore.</p>
+<h3 id="nodes">Nodes</h3>
+<p>This scenario has the following nodes when completed.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Node</th>
+<th align="center">IP #1</th>
+<th align="center">IP #2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">consul01</td>
+<td align="center">192.168.250.11</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cli">CLI</h2>
+<p>Now we are ready to begin exploring our Consul server using the CLI. So, to do
+this. Let's SSH into our <code>consul01</code> node.</p>
+<pre><code class="bash">vagrant ssh consul01
+</code></pre>
+
+<pre><code class="bash">▶ vagrant ssh consul01
+Welcome to Ubuntu 18.04.4 LTS (GNU/Linux 4.15.0-76-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+Last login: Mon Jul 20 14:45:45 2020 from 10.0.2.2
+vagrant@consul01:~$
+</code></pre>
+
+<p>Now that we've logged in, let's change into the <code>/etc/consul.d</code> directory and
+see what files/directories are present.</p>
+<pre><code class="bash">cd /etc/consul.d
+ls -la
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:~$ cd /etc/consul.d
+vagrant@consul01:/etc/consul.d$ ls -la
+total 20
+drwxr-xr-x  4 root root 4096 Jul 20 14:36 .
+drwxr-xr-x 79 root root 4096 Jul 20 14:36 ..
+drwxr-xr-x  2 root root 4096 Jul 20 14:36 client
+-rw-r--r--  1 root root  846 Jul 20 14:36 config.json
+drwxr-xr-x  2 root root 4096 Jul 20 14:36 scripts
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-configuration">CLI - Configuration</h3>
+<p>Let's first take a quick look at our Consul configuration while we're here.</p>
+<pre><code class="bash">cat config.json
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ cat config.json
+{
+    &quot;acl&quot;: {
+        &quot;default_policy&quot;: &quot;allow&quot;,
+        &quot;down_policy&quot;: &quot;extend-cache&quot;,
+        &quot;tokens&quot;: {
+            &quot;agent&quot;: &quot;&quot;,
+            &quot;agent_master&quot;: &quot;&quot;,
+            &quot;default&quot;: &quot;&quot;,
+            &quot;master&quot;: &quot;6DA12E0F-D8A5-48C5-AEFF-00D50E84D01A&quot;,
+            &quot;replication&quot;: &quot;&quot;
+        }
+    },
+    &quot;bind_addr&quot;: &quot;192.168.250.11&quot;,
+    &quot;bootstrap_expect&quot;: 1,
+    &quot;client_addr&quot;: &quot;0.0.0.0&quot;,
+    &quot;data_dir&quot;: &quot;/var/consul&quot;,
+    &quot;datacenter&quot;: &quot;dc1&quot;,
+    &quot;dns_config&quot;: {},
+    &quot;enable_acl_replication&quot;: false,
+    &quot;enable_syslog&quot;: true,
+    &quot;encrypt&quot;: &quot;WWw4l0h1LbB4+pC5+VUWiV8kMBNQc+nEwt8OODMx2xg=&quot;,
+    &quot;log_level&quot;: &quot;DEBUG&quot;,
+    &quot;node_name&quot;: &quot;consul01&quot;,
+    &quot;performance&quot;: {},
+    &quot;primary_datacenter&quot;: &quot;dc1&quot;,
+    &quot;retry_join&quot;: [
+        &quot;192.168.250.11&quot;
+    ],
+    &quot;retry_join_wan&quot;: [],
+    &quot;server&quot;: true,
+    &quot;telemetry&quot;: {},
+    &quot;ui&quot;: true
+}
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>And if we wanted to do a quick validation of our Consul configuration, we can
+do so by:</p>
+<pre><code class="bash">consul validate /etc/consul.d
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul validate /etc/consul.d
+Configuration is valid!
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-datacenters">CLI - Datacenters</h3>
+<p>Next, let's see what Consul datacenters exist:</p>
+<pre><code class="bash">consul catalog datacenters
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul catalog datacenters
+dc1
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>We can also use <code>curl</code> to retrieve the same information:</p>
+<pre><code class="bash">curl --silent http://127.0.0.1:8500/v1/catalog/datacenters | jq
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ curl --silent http://127.0.0.1:8500/v1/catalog/datacenters | jq
+[
+  &quot;dc1&quot;
+]
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-services">CLI - Services</h3>
+<p>Next, let's check and see what services are available:</p>
+<pre><code class="bash">consul catalog services
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul catalog services
+consul
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>We can also use <code>curl</code> to retrieve the same information:</p>
+<pre><code class="bash">curl --silent http://127.0.0.1:8500/v1/catalog/services | jq
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ curl --silent http://127.0.0.1:8500/v1/catalog/services | jq
+{
+  &quot;consul&quot;: []
+}
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-nodes">CLI - Nodes</h3>
+<p>Next, let's get a list of nodes available:</p>
+<pre><code class="bash">consul catalog nodes
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul catalog nodes
+Node      ID        Address         DC
+consul01  290c5be7  192.168.250.11  dc1
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>The command above gives us a simplistic view of our nodes, but if we'd like to
+get a more detailed view we can execute the following:</p>
+<pre><code class="bash">consul catalog nodes --detailed
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul catalog nodes --detailed
+Node      ID                                    Address         DC   TaggedAddresses                                                                           Meta
+consul01  290c5be7-7a03-7e9a-5db4-d87f912c1674  192.168.250.11  dc1  lan=192.168.250.11, lan_ipv4=192.168.250.11, wan=192.168.250.11, wan_ipv4=192.168.250.11  consul-network-segment=
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>As you can see, the above command gives us a much better detailed view into
+our nodes.</p>
+<p>We can also use <code>curl</code> to get the same information:</p>
+<pre><code class="bash">curl --silent http://127.0.0.1:8500/v1/catalog/nodes | jq
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ curl --silent http://127.0.0.1:8500/v1/catalog/nodes | jq
+[
+  {
+    &quot;ID&quot;: &quot;290c5be7-7a03-7e9a-5db4-d87f912c1674&quot;,
+    &quot;Node&quot;: &quot;consul01&quot;,
+    &quot;Address&quot;: &quot;192.168.250.11&quot;,
+    &quot;Datacenter&quot;: &quot;dc1&quot;,
+    &quot;TaggedAddresses&quot;: {
+      &quot;lan&quot;: &quot;192.168.250.11&quot;,
+      &quot;lan_ipv4&quot;: &quot;192.168.250.11&quot;,
+      &quot;wan&quot;: &quot;192.168.250.11&quot;,
+      &quot;wan_ipv4&quot;: &quot;192.168.250.11&quot;
+    },
+    &quot;Meta&quot;: {
+      &quot;consul-network-segment&quot;: &quot;&quot;
+    },
+    &quot;CreateIndex&quot;: 5,
+    &quot;ModifyIndex&quot;: 6
+  }
+]
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>And if we'd like to get detailed information for node <code>consul01</code> using <code>curl</code>:</p>
+<pre><code class="bash">curl --silent http://127.0.0.1:8500/v1/catalog/node/consul01 | jq
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ curl --silent http://127.0.0.1:8500/v1/catalog/node/consul01 | jq
+{
+  &quot;Node&quot;: {
+    &quot;ID&quot;: &quot;290c5be7-7a03-7e9a-5db4-d87f912c1674&quot;,
+    &quot;Node&quot;: &quot;consul01&quot;,
+    &quot;Address&quot;: &quot;192.168.250.11&quot;,
+    &quot;Datacenter&quot;: &quot;dc1&quot;,
+    &quot;TaggedAddresses&quot;: {
+      &quot;lan&quot;: &quot;192.168.250.11&quot;,
+      &quot;lan_ipv4&quot;: &quot;192.168.250.11&quot;,
+      &quot;wan&quot;: &quot;192.168.250.11&quot;,
+      &quot;wan_ipv4&quot;: &quot;192.168.250.11&quot;
+    },
+    &quot;Meta&quot;: {
+      &quot;consul-network-segment&quot;: &quot;&quot;
+    },
+    &quot;CreateIndex&quot;: 5,
+    &quot;ModifyIndex&quot;: 6
+  },
+  &quot;Services&quot;: {
+    &quot;consul&quot;: {
+      &quot;ID&quot;: &quot;consul&quot;,
+      &quot;Service&quot;: &quot;consul&quot;,
+      &quot;Tags&quot;: [],
+      &quot;Address&quot;: &quot;&quot;,
+      &quot;Meta&quot;: {
+        &quot;raft_version&quot;: &quot;3&quot;,
+        &quot;serf_protocol_current&quot;: &quot;2&quot;,
+        &quot;serf_protocol_max&quot;: &quot;5&quot;,
+        &quot;serf_protocol_min&quot;: &quot;1&quot;,
+        &quot;version&quot;: &quot;1.7.2&quot;
+      },
+      &quot;Port&quot;: 8300,
+      &quot;Weights&quot;: {
+        &quot;Passing&quot;: 1,
+        &quot;Warning&quot;: 1
+      },
+      &quot;EnableTagOverride&quot;: false,
+      &quot;Proxy&quot;: {
+        &quot;MeshGateway&quot;: {},
+        &quot;Expose&quot;: {}
+      },
+      &quot;Connect&quot;: {},
+      &quot;CreateIndex&quot;: 5,
+      &quot;ModifyIndex&quot;: 5
+    }
+  }
+}
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>We can also get the health of our <code>consul01</code> node using <code>curl</code>:</p>
+<pre><code class="bash">curl --silent http://127.0.0.1:8500/v1/health/node/consul01 | jq
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ curl --silent http://127.0.0.1:8500/v1/health/node/consul01 | jq
+[
+  {
+    &quot;Node&quot;: &quot;consul01&quot;,
+    &quot;CheckID&quot;: &quot;serfHealth&quot;,
+    &quot;Name&quot;: &quot;Serf Health Status&quot;,
+    &quot;Status&quot;: &quot;passing&quot;,
+    &quot;Notes&quot;: &quot;&quot;,
+    &quot;Output&quot;: &quot;Agent alive and reachable&quot;,
+    &quot;ServiceID&quot;: &quot;&quot;,
+    &quot;ServiceName&quot;: &quot;&quot;,
+    &quot;ServiceTags&quot;: [],
+    &quot;Type&quot;: &quot;&quot;,
+    &quot;Definition&quot;: {},
+    &quot;CreateIndex&quot;: 5,
+    &quot;ModifyIndex&quot;: 5
+  }
+]
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="cli-datacenter-members">CLI - Datacenter Members</h3>
+<p>To get a list of Consul datacenter members, we can simply execute:</p>
+<pre><code class="bash">consul members list
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul members list
+Node      Address              Status  Type    Build  Protocol  DC   Segment
+consul01  192.168.250.11:8301  alive   server  1.7.2  2         dc1  &lt;all&gt;
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>Next let's take a look at <code>consul01</code> information specifically.</p>
+<pre><code class="bash">consul info
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul info
+agent:
+    check_monitors = 0
+    check_ttls = 0
+    checks = 0
+    services = 0
+build:
+    prerelease =
+    revision = 9ea1a204
+    version = 1.7.2
+consul:
+    acl = disabled
+    bootstrap = true
+    known_datacenters = 1
+    leader = true
+    leader_addr = 192.168.250.11:8300
+    server = true
+raft:
+    applied_index = 142
+    commit_index = 142
+    fsm_pending = 0
+    last_contact = 0
+    last_log_index = 142
+    last_log_term = 3
+    last_snapshot_index = 0
+    last_snapshot_term = 0
+    latest_configuration = [{Suffrage:Voter ID:290c5be7-7a03-7e9a-5db4-d87f912c1674 Address:192.168.250.11:8300}]
+    latest_configuration_index = 0
+    num_peers = 0
+    protocol_version = 3
+    protocol_version_max = 3
+    protocol_version_min = 0
+    snapshot_version_max = 1
+    snapshot_version_min = 0
+    state = Leader
+    term = 3
+runtime:
+    arch = amd64
+    cpu_count = 1
+    goroutines = 81
+    max_procs = 2
+    os = linux
+    version = go1.13.7
+serf_lan:
+    coordinate_resets = 0
+    encrypted = true
+    event_queue = 1
+    event_time = 3
+    failed = 0
+    health_score = 0
+    intent_queue = 1
+    left = 0
+    member_time = 3
+    members = 1
+    query_queue = 0
+    query_time = 1
+serf_wan:
+    coordinate_resets = 0
+    encrypted = true
+    event_queue = 0
+    event_time = 1
+    failed = 0
+    health_score = 0
+    intent_queue = 0
+    left = 0
+    member_time = 1
+    members = 1
+    query_queue = 0
+    query_time = 1
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h2 id="ui">UI</h2>
+<p>Now that we've explored our Consul setup using some basic CLI commands, let's
+jump into the Consul UI.</p>
+<p>Open your preferred browser of choice and head over to <a href="http://192.168.250.11:8500/ui">http://192.168.250.11:8500/ui</a></p>
+<h3 id="ui-services">UI - Services</h3>
+<p>Click on services and you'll see we only have one service currently in Consul,
+which will look like below.</p>
+<p><img alt="Consul UI - Services" src="../2020-07-20-11-11-19.png" /></p>
+<p>And if you click on the <code>Consul</code> service to dig in further, you'll see a bit
+of information on our <code>Consul</code> service.</p>
+<p><img alt="Consul UI - Services - Consul" src="../2020-07-20-11-15-36.png" /></p>
+<h3 id="ui-nodes">UI - Nodes</h3>
+<p>Next, let's click on nodes and we <strong>SHOULD</strong> only see our <code>consul01</code> node listed.</p>
+<p><img alt="Consul UI - Node" src="../2020-07-20-11-33-19.png" /></p>
+<p>Let's now click on <code>consul01</code> and dig in a bit more on this node.</p>
+<p><img alt="Consul UI - Node Status" src="../2020-07-20-11-35-16.png" /></p>
+<h2 id="dns">DNS</h2>
+<p>One of the beautiful things with Consul is that we have access to a DNS
+interface. The DNS interfaces provides us with a way to perform various lookups
+using normal DNS methods. This removes the need to use the API to do a lookup
+of any kind. One thing to note here is: The Consul DNS interface listens on
+port <code>8600</code> by default.</p>
+<blockquote>
+<p>NOTE: We will explore options to get the DNS interface to become transparent
+to systems in a later excercise.</p>
+</blockquote>
+<h3 id="dns-node-lookups">DNS - Node Lookups</h3>
+<p>One example of using the DNS interface is to lookup nodes and get a list of
+records available.</p>
+<p>Let's see what DNS returns for our <code>consul01</code> node.</p>
+<pre><code class="bash">dig @127.0.0.1 -p 8600 consul01.node.consul ANY
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ dig @127.0.0.1 -p 8600 consul01.node.consul ANY
+
+; &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.11-Ubuntu &lt;&lt;&gt;&gt; @127.0.0.1 -p 8600 consul01.node.consul ANY
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 53553
+;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;consul01.node.consul.      IN  ANY
+
+;; ANSWER SECTION:
+consul01.node.consul.   0   IN  A   192.168.250.11
+consul01.node.consul.   0   IN  TXT &quot;consul-network-segment=&quot;
+
+;; Query time: 1 msec
+;; SERVER: 127.0.0.1#8600(127.0.0.1)
+;; WHEN: Mon Jul 20 19:50:35 UTC 2020
+;; MSG SIZE  rcvd: 101
+
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="dns-service-lookups">DNS - Service Lookups</h3>
+<p>We can also use Consul to perform service lookups. The context of a service
+lookup looks like: <code>[tag.]&lt;service&gt;.service[.datacenter].&lt;domain&gt;</code>. The <code>tag</code>
+is an optional field that can be used to find a specific tag when services may
+be named the same but are used for entirely different things.</p>
+<p>For example, we may have multiple <code>db</code> services registered. But we could use
+tags to delineate between <code>development</code> and <code>production</code>. So, any application
+for <code>development</code> could find it's <code>db</code> service by using <code>development.db.service.consul</code>.</p>
+<p>Also, the <code>datacenter</code> is optional unless you need to find a service outside of
+your Consul agent's default Consul datacenter. So, if you are looking for a
+service in the same Consul datacenter, you can skip the <code>datacenter</code> portion. Otherwise, you can add the <code>datacenter</code> to find a service in another Consul
+datacenter.</p>
+<p>Seeing as we don't have any services registered at this point, we will just use
+the default <code>consul</code> service to perform an example DNS service lookup.</p>
+<pre><code class="bash">dig @127.0.0.1 -p 8600 consul.service.consul
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ dig @127.0.0.1 -p 8600 consul.service.consul
+
+; &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.11-Ubuntu &lt;&lt;&gt;&gt; @127.0.0.1 -p 8600 consul.service.consul
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 5946
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;consul.service.consul.     IN  A
+
+;; ANSWER SECTION:
+consul.service.consul.  0   IN  A   192.168.250.11
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#8600(127.0.0.1)
+;; WHEN: Mon Jul 20 20:06:08 UTC 2020
+;; MSG SIZE  rcvd: 66
+
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="dns-systemd-resolved">DNS - systemd-resolved</h3>
+<p>Oh my! <strong>systemd-resolved</strong> What a pain. However, we can work around this
+relatively easy and not disable it. Many times I have opted to just disable
+<code>systemd-resolved</code> and install <code>Dnsmasq</code> and move on. But for this learnining
+we will install <code>Dnsmasq</code>, reconfigure <code>systemd-resolved</code> to forward
+to <code>Dnsmasq</code>, and configure <code>Dnsmasq</code> to forward the <code>consul</code> domain to our
+Consul client's DNS port.</p>
+<p>We will be doing this on all of our servers within our stack to ensure they
+are all consistent. As well as, properly resolve services registered in Consul
+without the need to do specific work arounds for various things such as: NGINX,
+etc. The benefit will be to understand how we can leverge Consul in any
+environment. To easily reach our services without load balancers, etc.
+For example, we might have an NGINX web server configured as a reverse proxy
+for many different sites within our environment. Think of our NGINX reverse
+proxy functioning as a form of an application gateway. We could frontend our
+application gateways with an external load balancer, which sends all HTTP(s)
+traffic to our application gateways. Then our application gateways can make
+decisions based on the URL, to properly redirect to our applications. The point
+here is that we could easily just define resolvers for NGINX, but that wouldn't
+solve OS level DNS resolution for services such as logging, etc.</p>
+<p>So, what does this look like after we provision our servers? Let's jump in and
+take a look.</p>
+<pre><code class="bash">vagrant ssh consul01
+</code></pre>
+
+<p>Next, let's look at our <code>systemd-resolved</code> configuration and then Dnsmasq.</p>
+<pre><code class="bash">cat /etc/systemd/resolved.conf
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:~$ cat /etc/systemd/resolved.conf
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+#
+# Entries in this file show the compile time defaults.
+# You can change settings by editing this file.
+# Defaults can be restored by simply deleting this file.
+#
+# See resolved.conf(5) for details
+
+[Resolve]
+DNS=127.0.0.2
+#FallbackDNS=
+#Domains=
+#LLMNR=no
+#MulticastDNS=no
+#DNSSEC=no
+#Cache=yes
+#DNSStubListener=yes
+vagrant@consul01:~$
+</code></pre>
+
+<p>The important thing from above is the line <code>DNS=127.0.0.2</code>. This is telling
+<code>systemd-resolved</code> to forward all lookups to <code>127.0.0.2</code> which is what IP
+<code>Dnsmasq</code> is bound to.</p>
+<p>And if we take a quick look at <code>/etc/dnsmasq.conf</code> we can verify that is correct
+as well.</p>
+<pre><code class="bash">cat /etc/dnsmasq.conf
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:~$ cat /etc/dnsmasq.conf
+bind-interfaces
+port=53
+listen-address=127.0.0.2
+server=/consul/127.0.0.1#8600
+
+# Uncomment and modify as appropriate to enable reverse DNS lookups for
+# common netblocks found in RFC 1918, 5735, and 6598:
+#rev-server=0.0.0.0/8,127.0.0.1#8600
+#rev-server=10.0.0.0/8,127.0.0.1#8600
+#rev-server=100.64.0.0/10,127.0.0.1#8600
+#rev-server=127.0.0.1/8,127.0.0.1#8600
+#rev-server=169.254.0.0/16,127.0.0.1#8600
+#rev-server=172.16.0.0/12,127.0.0.1#8600
+#rev-server=192.168.0.0/16,127.0.0.1#8600
+#rev-server=224.0.0.0/4,127.0.0.1#8600
+#rev-server=240.0.0.0/4,127.0.0.1#8600
+vagrant@consul01:~$
+</code></pre>
+
+<p>And as you can see, we have configured <code>listen-address=127.0.0.2</code> and
+<code>bind-interfaces</code> to ensure that Dnsmasq only listens on that IP. We have also
+added <code>server=/consul/127.0.0.1#8600</code> which tells Dnsmasq to forward all <code>consul</code>
+domains to thee local Consul client's DNS port(8600).</p>
+<p>Now let's verify that our DNS resolution is working properly to find registered
+services in Consul.</p>
+<pre><code class="bash">dig consul.service.dc1.consul
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:~$ dig consul.service.dc1.consul
+
+; &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.11-Ubuntu &lt;&lt;&gt;&gt; consul.service.dc1.consul
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 60558
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;consul.service.dc1.consul. IN  A
+
+;; ANSWER SECTION:
+consul.service.dc1.consul. 0    IN  A   192.168.250.11
+
+;; Query time: 3 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Tue Jul 21 17:02:35 UTC 2020
+;; MSG SIZE  rcvd: 70
+
+vagrant@consul01:~$
+</code></pre>
+
+<h2 id="kv-store">KV Store</h2>
+<p>The Consul KV store is another core feature of Consul. The KV store allows
+users to store indexed objects for various usages. The KV store is also a simple
+one that is not intended to replace a full featured KV datastore.</p>
+<p>The KV store does have an object size limitation of <code>512KB</code>. Otherwise there
+are not any restrictions to its usage.</p>
+<h3 id="kv-store-examples">KV Store - Examples</h3>
+<p>To get familiar using the KV store, we will walk through some basic examples.</p>
+<h3 id="kv-store-examples-put">KV Store - Examples - Put</h3>
+<p>First, let's create a few KV pairs:</p>
+<pre><code class="bash">consul kv put users/example/username example
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv put users/example/username example
+Success! Data written to: users/example/username
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<pre><code class="bash">consul kv put users/example/email example@example.org
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv put users/example/email example@example.org
+Success! Data written to: users/example/email
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<pre><code class="bash">consul kv put users/example/lists [&quot;list1&quot;,&quot;list2&quot;]
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv put users/example/lists [&quot;list1&quot;,&quot;list2&quot;]
+Success! Data written to: users/example/lists
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>You can also add the contents of a file as the value for a key. So, let's use
+an example YAML file that is stored in our project.</p>
+<pre><code class="bash">consul kv put cloud/config @/vagrant/learning/Consul/kv_example.yaml
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv put cloud/config @/vagrant/learning/Consul/kv_example.yaml
+Success! Data written to: cloud/config
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="kv-store-examples-get">KV Store - Examples - Get</h3>
+<p>Now let's explore how we can get the KV pairs.</p>
+<pre><code class="bash">consul kv get users/example/email
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv get users/example/email
+example@example.org
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<pre><code class="bash">consul kv get users/example/lists
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv get users/example/lists
+[list1,list2]
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>We can also get all of the keys defined within a path recursively.</p>
+<pre><code class="bash">consul kv get --recurse users
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv get --recurse users
+users/example/email:example@example.org
+users/example/lists:[list1,list2]
+users/example/username:example
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>Now let's get the contents of the file that we added.</p>
+<pre><code class="bash">consul kv get cloud/config
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv get cloud/config
+# =================================================================
+# Cloud Information
+# =================================================================
+cloud:
+  # Cloud Name: The cloud name must not contain spaces or special
+  # characters. The name is used for the OpenStack region name.
+  name: MyCloudName
+  # Cloud Description
+  description: Controller + N Compute Topology - x86 KVM
+  # Cloud Administrator (admin) User's Password
+  password: MyCloudPassword
+  # Cloud Database Service Type: db2 or mysql
+  database_service_type: db2
+  # Cloud Messaging Service Type: rabbitmq or qpid
+  messaging_service_type: rabbitmq
+  # Cloud Features: The cloud features to be enabled or disabled.
+  features:
+    self_service_portal: enabled
+    platform_resource_scheduler: enabled
+  # Cloud Topology: References the node name(s) for each role
+  # within the cloud's topology.
+  topology:
+    database_node_name: controller
+    controller_node_name: controller
+    self_service_portal_node_name: controller
+    kvm_compute_node_names: kvm_compute
+
+# ================================================================
+# Environment Information
+# ================================================================
+environment:
+  base: example-ibm-os-single-controller-n-compute
+  default_attributes:
+  # (Optional) Add Default Environment Attributes
+
+  override_attributes:
+  # (Optional) Add Override Environment Attributes
+
+# ================================================================
+# Node Information
+# ================================================================
+nodes:
+  - name: controller
+    description: Cloud controller node
+    fqdn: controllername.company.com
+    password: passw0rd
+    identity_file: ~
+    nics:
+      management_network: eth0
+      data_network: eth1
+  - name: kvm_compute
+    description: Cloud KVM compute node
+    fqdn: kvmcomputename.company.com
+    password: ~
+    identity_file: /root/identity.pem
+    nics:
+      management_network: eth0
+      data_network: eth1
+    # (Optional) Node Attribute JSON File
+    attribute_file: ~
+
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<h3 id="kv-store-examples-delete">KV Store - Examples - Delete</h3>
+<p>Now that we've explored adding and getting KV pairs from Consul. Let's now
+explore deleting those KV pairs.</p>
+<pre><code class="bash">consul kv delete users/example/lists
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv delete users/example/lists
+Success! Deleted key: users/example/lists
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<pre><code class="bash">consul kv delete cloud/config
+</code></pre>
+
+<pre><code class="bash">vagrant@consul01:/etc/consul.d$ consul kv delete cloud/config
+Success! Deleted key: cloud/config
+vagrant@consul01:/etc/consul.d$
+</code></pre>
+
+<p>And as we saw previously with recursively getting keys, we can also delete keys
+recursively.</p>
+<pre><code class="bash">consul kv delete --recurse users
+</code></pre>
+
+<p>vagrant@consul01:/etc/consul.d$ consul kv delete --recurse users
+Success! Deleted keys with prefix: users
+vagrant@consul01:/etc/consul.d$</p>
+<pre><code>
+</code></pre>
+
+<h2 id="tearing-down">Tearing Down</h2>
+<p>After you've explored a single Consul node setup. You'll likely be ready to move
+onto more advanced scenarios. So, just as we did when spinning up. We can quickly
+tear everything down.</p>
+<pre><code class="bash">./scripts/cleanup.sh
+</code></pre>
+
+<pre><code class="bash">▶ ./scripts/cleanup.sh
+==&gt; consul01: Forcing shutdown of VM...
+==&gt; consul01: Destroying VM and associated drives...
+(venv)
+</code></pre>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../04_Scenarios/" title="04. Scenarios" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                04. Scenarios
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../06_Consul_Cluster/" title="06. Consul - Cluster" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                06. Consul - Cluster
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.a68abb33.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

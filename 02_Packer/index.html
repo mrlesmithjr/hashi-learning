@@ -1,0 +1,725 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.4.0">
+    
+    
+      
+        <title>02. Packer - Hashi Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.fe0cca5b.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#02-packer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Hashi Learning" class="md-header-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Hashi Learning
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              02. Packer
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Hashi Learning" class="md-nav__button md-logo" aria-label="Hashi Learning">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Hashi Learning
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Hashi Learning" class="md-nav__link">
+      Hashi Learning
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../01_Getting_Started/" title="01. Getting Started" class="md-nav__link">
+      01. Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        02. Packer
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="02. Packer" class="md-nav__link md-nav__link--active">
+      02. Packer
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installing" class="md-nav__link">
+    Installing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#images" class="md-nav__link">
+    Images
+  </a>
+  
+    <nav class="md-nav" aria-label="Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template" class="md-nav__link">
+    Template
+  </a>
+  
+    <nav class="md-nav" aria-label="Template">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ubuntu-1804-template" class="md-nav__link">
+    Ubuntu 18.04 Template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#builders" class="md-nav__link">
+    Builders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provisioners" class="md-nav__link">
+    Provisioners
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-processors" class="md-nav__link">
+    Post-Processors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validating" class="md-nav__link">
+    Validating
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building" class="md-nav__link">
+    Building
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../03_Vagrant/" title="03. Vagrant" class="md-nav__link">
+      03. Vagrant
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../04_Scenarios/" title="04. Scenarios" class="md-nav__link">
+      04. Scenarios
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../05_Consul/" title="05. Consul - Single Node" class="md-nav__link">
+      05. Consul - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../06_Consul_Cluster/" title="06. Consul - Cluster" class="md-nav__link">
+      06. Consul - Cluster
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../07_Consul_Service_Discovery_HAProxy/" title="07. Consul - Service Discovery with HAProxy" class="md-nav__link">
+      07. Consul - Service Discovery with HAProxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../08_Consul_NGINX_Reverse_Proxy/" title="08. Consul - NGINX Reverse Proxy" class="md-nav__link">
+      08. Consul - NGINX Reverse Proxy
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../09_Vault/" title="09. Vault - Single Node" class="md-nav__link">
+      09. Vault - Single Node
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../10_Vault_HA/" title="10. Vault - HA" class="md-nav__link">
+      10. Vault - HA
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installing" class="md-nav__link">
+    Installing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#images" class="md-nav__link">
+    Images
+  </a>
+  
+    <nav class="md-nav" aria-label="Images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template" class="md-nav__link">
+    Template
+  </a>
+  
+    <nav class="md-nav" aria-label="Template">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ubuntu-1804-template" class="md-nav__link">
+    Ubuntu 18.04 Template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#builders" class="md-nav__link">
+    Builders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provisioners" class="md-nav__link">
+    Provisioners
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-processors" class="md-nav__link">
+    Post-Processors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validating" class="md-nav__link">
+    Validating
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building" class="md-nav__link">
+    Building
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="02-packer">02. Packer</h1>
+<blockquote>
+<p>HashiCorp Packer automates the creation of any type of machine image. It embraces modern configuration management by encouraging you to use automated scripts to install and configure the software within your Packer-made images. Packer brings machine images into the modern age, unlocking untapped potential and opening new opportunities.</p>
+</blockquote>
+<h2 id="installing">Installing</h2>
+<p>Before we can get started using Packer, we need to first install it. So, please
+follow the instructions found <a href="https://www.packer.io/downloads">here</a> based on
+your OS.</p>
+<h2 id="images">Images</h2>
+<p>Now that you've installed Packer, let's go ahead and build our first image. Our
+first image will be a <code>Ubuntu 18.04</code> server image. We will be using this image
+as part of our learning from here on out once we've completed the build.</p>
+<h3 id="template">Template</h3>
+<p>The very first thing you'll need in order to build a Packer image is a template.
+A Packer template is the configuration that describes the image that you intend
+to build. This template is written in JSON.</p>
+<p>We have included a <code>Ubuntu 18.04</code> template as part of this repository that will
+be used. You can find this template in <code>learning/Packer</code>, and the template name
+is <code>ubuntu1804.json</code>.</p>
+<h4 id="ubuntu-1804-template">Ubuntu 18.04 Template</h4>
+<p>The following template is the one we will be using here in a few moments.</p>
+<pre><code class="json">{
+  &quot;variables&quot;: {
+    &quot;boot_command_prefix&quot;: &quot;&lt;enter&gt;&lt;wait&gt;&lt;f6&gt;&lt;esc&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&quot;,
+    &quot;compression_level&quot;: &quot;6&quot;,
+    &quot;iso_checksum&quot;: &quot;e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b&quot;,
+    &quot;iso_url&quot;: &quot;http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso&quot;,
+    &quot;vm_disk_adapter_type&quot;: &quot;scsi&quot;,
+    &quot;vm_disk_size&quot;: &quot;36864&quot;,
+    &quot;vm_memory&quot;: &quot;1024&quot;,
+    &quot;vm_name&quot;: &quot;ubuntu1804&quot;,
+    &quot;vm_ssh_password&quot;: &quot;vagrant&quot;,
+    &quot;vm_ssh_username&quot;: &quot;vagrant&quot;,
+    &quot;vm_vcpu&quot;: &quot;1&quot;
+  },
+  &quot;builders&quot;: [
+    {
+      &quot;boot_command&quot;: [
+        &quot;{{ user `boot_command_prefix` }}&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot;/install/vmlinuz&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; initrd=/install/initrd.gz&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; auto=true&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; priority=critical&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu/preseed.cfg &lt;wait&gt;&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot;&lt;enter&gt;&quot;
+      ],
+      &quot;cpus&quot;: &quot;{{ user `vm_vcpu` }}&quot;,
+      &quot;disk_size&quot;: &quot;{{ user `vm_disk_size` }}&quot;,
+      &quot;guest_os_type&quot;: &quot;Ubuntu_64&quot;,
+      &quot;hard_drive_interface&quot;: &quot;{{ user `vm_disk_adapter_type` }}&quot;,
+      &quot;headless&quot;: true,
+      &quot;http_directory&quot;: &quot;http&quot;,
+      &quot;iso_checksum&quot;: &quot;{{ user `iso_checksum` }}&quot;,
+      &quot;iso_url&quot;: &quot;{{ user `iso_url` }}&quot;,
+      &quot;memory&quot;: &quot;{{ user `vm_memory` }}&quot;,
+      &quot;output_directory&quot;: &quot;output-{{ user `vm_name` }}-{{ build_type }}-{{ timestamp }}&quot;,
+      &quot;shutdown_command&quot;: &quot;echo '/sbin/halt -h -p' &gt; shutdown.sh; echo 'packer'|sudo -S bash 'shutdown.sh'&quot;,
+      &quot;ssh_password&quot;: &quot;{{ user `vm_ssh_password` }}&quot;,
+      &quot;ssh_username&quot;: &quot;{{ user `vm_ssh_username` }}&quot;,
+      &quot;type&quot;: &quot;virtualbox-iso&quot;,
+      &quot;vm_name&quot;: &quot;{{ user `vm_name` }}-{{ timestamp }}&quot;,
+      &quot;ssh_timeout&quot;: &quot;60m&quot;
+    }
+  ],
+  &quot;provisioners&quot;: [
+    {
+      &quot;type&quot;: &quot;shell&quot;,
+      &quot;scripts&quot;: [
+        &quot;scripts/base.sh&quot;,
+        &quot;scripts/vagrant.sh&quot;,
+        &quot;scripts/virtualbox.sh&quot;,
+        &quot;scripts/vmware.sh&quot;,
+        &quot;scripts/cleanup.sh&quot;,
+        &quot;scripts/zerodisk.sh&quot;
+      ]
+    }
+  ],
+  &quot;post-processors&quot;: [
+    [
+      {
+        &quot;compression_level&quot;: &quot;{{ user `compression_level` }}&quot;,
+        &quot;output&quot;: &quot;{{ user `vm_name` }}-{{.Provider}}-{{ timestamp }}.box&quot;,
+        &quot;type&quot;: &quot;vagrant&quot;
+      },
+      {
+        &quot;type&quot;: &quot;manifest&quot;,
+        &quot;output&quot;: &quot;manifest.json&quot;,
+        &quot;strip_path&quot;: true
+      }
+    ]
+  ]
+}
+</code></pre>
+
+<h4 id="builders">Builders</h4>
+<h4 id="provisioners">Provisioners</h4>
+<h4 id="post-processors">Post-Processors</h4>
+<h3 id="validating">Validating</h3>
+<p>Now that we have the template that we will be using, we should first validate
+it. So, let's go ahead and do that now.</p>
+<pre><code class="bash">cd learning/Packer
+packer validate ubuntu1804.json
+</code></pre>
+
+<h3 id="building">Building</h3>
+<p>Now that our template has been validated, we are ready to build our first image.
+So, if you are not currently in the <code>learning/Packer</code> directory, let's go ahead
+and change into that directory.</p>
+<p>Now that we're in the <code>learning/Packer</code> directory, let's go ahead and build our
+image.</p>
+<pre><code class="bash">packer build ubuntu1804.json
+</code></pre>
+
+<pre><code class="bash">virtualbox-iso: output will be in this color.
+
+==&gt; virtualbox-iso: Retrieving Guest additions
+==&gt; virtualbox-iso: Trying /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
+==&gt; virtualbox-iso: Trying /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
+==&gt; virtualbox-iso: /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso =&gt; /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
+==&gt; virtualbox-iso: Retrieving ISO
+==&gt; virtualbox-iso: Trying http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso
+==&gt; virtualbox-iso: Trying http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso?checksum=sha256%3Ae2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b
+ubuntu-18.04.4-server-amd64.iso 532.94 MiB / 921.00 MiB [=================================================&gt;-----------------------------------]  57.86% 00m28s
+...
+==&gt; Builds finished. The artifacts of successful builds are:
+--&gt; virtualbox-iso: 'virtualbox' provider box: ubuntu1804-virtualbox-1595373302.box
+--&gt; virtualbox-iso:
+</code></pre>
+
+<p>And once the build completes you will have a <code>ubuntu-virtualbox-**********.box</code>
+file which is our Vagrant box image that we will be using. In the example
+above, my Vagrant box file was <code>ubuntu1804-virtualbox-1595373302.box</code>.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../01_Getting_Started/" title="01. Getting Started" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                01. Getting Started
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../03_Vagrant/" title="03. Vagrant" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                03. Vagrant
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../assets/javascripts/bundle.b39636ac.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.a68abb33.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
