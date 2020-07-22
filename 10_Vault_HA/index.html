@@ -279,9 +279,55 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        10. Vault - HA
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
     <a href="./" title="10. Vault - HA" class="md-nav__link md-nav__link--active">
       10. Vault - HA
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+    <nav class="md-nav" aria-label="Spinning Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -303,6 +349,36 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spinning-up" class="md-nav__link">
+    Spinning Up
+  </a>
+  
+    <nav class="md-nav" aria-label="Spinning Up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nodes" class="md-nav__link">
+    Nodes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -318,6 +394,64 @@
                 
                 
                 <h1 id="10-vault-ha">10. Vault - HA</h1>
+<p>In this scenario, we will spin up a three node Consul cluster along with three
+Vault servers configured in HA. This scenario is perfect to learn a bit about
+how Vault and Consul function together in HA.</p>
+<h2 id="spinning-up">Spinning Up</h2>
+<p>First we need to export our scenario configuration for Vagrant:</p>
+<pre><code class="bash">export SCENARIO=scenarios/vault_ha.yml
+</code></pre>
+
+<p>Now that we've exported our scenario configuration, we are ready to spin up
+our environment:</p>
+<pre><code class="bash">vagrant up
+</code></pre>
+
+<p>And off we go! You will see a lot going on here as Vagrant and Ansible do their
+job.</p>
+<h3 id="nodes">Nodes</h3>
+<p>This scenario has the following nodes when completed.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Node</th>
+<th align="center">IP #1</th>
+<th align="center">IP #2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">consul01</td>
+<td align="center">192.168.250.11</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">consul02</td>
+<td align="center">192.168.250.12</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">consul03</td>
+<td align="center">192.168.250.13</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">vault01</td>
+<td align="center">192.168.250.21</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">vault02</td>
+<td align="center">192.168.250.22</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">vault03</td>
+<td align="center">192.168.250.23</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
                 
               
               
