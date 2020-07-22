@@ -10,3 +10,5 @@ from below and follow any of the instructions required.
 - [Consul Cluster](06_Consul_Cluster.md) - A three node Consul cluster
 - [Consul Service Discovery with HAProxy](07_Consul_Service_Discovery_HAProxy.md)
 - [Consul NGINX Reverse Proxy](08_Consul_NGINX_Reverse_Proxy.md)
+- [Vault](09_Vault.md) - A single node Vault server
+- [Vault HA](10_Vault_HA.md) - Vault high availability w/Consul cluster storage
