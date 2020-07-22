@@ -4,6 +4,12 @@
 
 - hosts: vault_servers
   tasks:
+    - name: Applying ansible-hashi-vault
+      import_role:
+        name: ansible-hashi-vault
+
+- hosts: vault_ha_servers
+  tasks:
     - name: Applying ansible-consul-client
       import_role:
         name: ansible-consul-client

@@ -8,6 +8,8 @@
 - import_playbook: consul.yml
 
 - import_playbook: consul_dnsmasq_systemd_resolved.yml
+  when:
+    - inventory_hostname not in groups['vault_servers']
 
 - import_playbook: vault.yml
 

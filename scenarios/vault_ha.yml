@@ -105,7 +105,7 @@ nodes:
     windows: false
   - name: vault01
     ansible_groups:
-      - vault_servers
+      - vault_ha_servers
     box: local/ubuntu1804
     desktop: false
     disable_synced_folders: false
@@ -126,7 +126,7 @@ nodes:
     windows: false
   - name: vault02
     ansible_groups:
-      - vault_servers
+      - vault_ha_servers
     box: local/ubuntu1804
     desktop: false
     disable_synced_folders: false
@@ -147,7 +147,7 @@ nodes:
     windows: false
   - name: vault03
     ansible_groups:
-      - vault_servers
+      - vault_ha_servers
     box: local/ubuntu1804
     desktop: false
     disable_synced_folders: false

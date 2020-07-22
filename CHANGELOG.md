@@ -1,3 +1,17 @@
+commit 88cdfd9b1b82773dc14030ebba2c8416e183cdd7
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Tue Jul 21 20:07:46 2020 -0400
+
+    Cleaned out previous material from main README
+
+commit 800da9985af4a3e925b056cb4076f6529b8d5e78
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Tue Jul 21 20:01:20 2020 -0400
+
+    Completely rewritting content
+    
+    This is just the beginning
+
 commit 4affa14414dcd1a55fcecddd96a5062670f5d3d6
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Sun Jul 19 02:11:57 2020 -0400
