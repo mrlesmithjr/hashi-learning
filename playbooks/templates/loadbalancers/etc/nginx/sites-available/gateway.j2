@@ -1,0 +1,78 @@
+{{ ansible_managed|comment }}
+
+# Defines default management upstream - Likely not used
+upstream default_mgmt {
+    server 127.0.0.1;
+}
+
+# Defines default services upstream - This will generally be the catch all
+upstream default_svcs {
+    server 127.0.0.1;
+}
+
+# Defines Grafana upstream - management
+upstream grafana {
+	ip_hash;
+    server grafana.service.consul:3000;
+}
+
+server {
+	listen {{ hostvars[inventory_hostname]['ansible_enp0s9']['ipv4']['address'] }}:80;
+	server_name *.{{ pri_domain_name }};
+
+#	auth_basic "Restricted Access";  # Secure by default
+#	auth_basic_user_file /etc/nginx/htpasswd.users; # Secure by default
+
+	# location / will generally be redirected to default services upstream
+	location / {
+		auth_basic off;
+		proxy_intercept_errors on;
+		proxy_pass http://default_svcs;
+		proxy_redirect off;
+
+		# Proxy headers
+		proxy_set_header Upgrade           $http_upgrade;
+		proxy_set_header Connection        "upgrade";
+		proxy_set_header Host              $host;
+		proxy_set_header X-Real-IP         $remote_addr;
+		proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_set_header X-Forwarded-Host  $host;
+		proxy_set_header X-Forwarded-Port  $server_port;
+
+		# Proxy timeouts
+		proxy_connect_timeout              60s;
+		proxy_send_timeout                 60s;
+		proxy_read_timeout                 60s;
+	}
+
+	location /grafana/ {
+		proxy_pass http://grafana;
+		proxy_set_header Authorization ""; # Required when using htpasswd
+
+		# Proxy headers
+		proxy_set_header Upgrade           $http_upgrade;
+		proxy_set_header Connection        "upgrade";
+		proxy_set_header Host              $host;
+		proxy_set_header X-Real-IP         $remote_addr;
+		proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_set_header X-Forwarded-Host  $host;
+		proxy_set_header X-Forwarded-Port  $server_port;
+
+		# Proxy timeouts
+		proxy_connect_timeout              60s;
+		proxy_send_timeout                 60s;
+		proxy_read_timeout                 60s;
+	}
+
+	location /nginx_status {
+		auth_basic off;
+		# Enable Nginx stats
+		stub_status on;
+		# Only allow access from your IP e.g 1.1.1.1 or localhost #
+		allow 127.0.0.1;
+		# Other request should be denied
+		deny all;
+	}
+}

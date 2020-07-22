@@ -1,2 +1,4 @@
 ---
+hashi_vault_remain_unsealed: true
+
 vault_bind_interface: "{{ bind_interface }}"

@@ -56,18 +56,18 @@
         name: ["py-pip", "python-dev"]
         state: present
       become: true
-      when: >
-        ansible_os_family == "Alpine" and
-        ansible_distribution_version < "3.5"
+      when:
+        - ansible_os_family == "Alpine"
+        - ansible_distribution_version is version('3.5', <)
 
     - name: Installing Python Packages (Alpine)
       apk:
         name: ["py2-pip", "python2-dev"]
         state: present
       become: true
-      when: >
-        ansible_os_family == "Alpine" and
-        ansible_distribution_version >= "3.5"
+      when:
+        - ansible_os_family == "Alpine"
+        - ansible_distribution_version is version('3.5', '>=')
 
     # Install pre-reqs for Ansible install
     - name: Installing Ansible Pre-Reqs (Debian)
@@ -75,19 +75,19 @@
         name: "{{ debian_packages }}"
         state: present
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family == "Debian"
+      when:
+        - install_ansible|bool
+        - ansible_os_family == "Debian"
 
     - name: Installing EPEL Repo (RedHat)
       yum:
         name: epel-release
         state: present
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family == "RedHat" and
-        ansible_distribution != "Fedora"
+      when:
+        - install_ansible|bool
+        - ansible_os_family == "RedHat"
+        - ansible_distribution != "Fedora"
 
     # Install pre-reqs for Ansible install
     - name: Installing Ansible Pre-Reqs (RedHat)
@@ -95,10 +95,10 @@
         name: "{{ redhat_packages }}"
         state: present
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family == "RedHat" and
-        ansible_distribution != "Fedora"
+      when:
+        - install_ansible|bool
+        - ansible_os_family == "RedHat"
+        - ansible_distribution != "Fedora"
 
     # Install pre-reqs for Ansible install
     - name: Installing Ansible Pre-Reqs (Fedora)
@@ -106,10 +106,10 @@
         name: python-dnf
         state: present
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family == "RedHat" and
-        ansible_distribution == "Fedora"
+      when:
+        - install_ansible|bool
+        - ansible_os_family == "RedHat"
+        - ansible_distribution == "Fedora"
 
     # Install pre-reqs for Ansible install
     - name: Installing Ansible Pre-Reqs (Fedora)
@@ -117,10 +117,10 @@
         name: "{{ redhat_packages }}"
         state: present
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family == "RedHat" and
-        ansible_distribution == "Fedora"
+      when:
+        - install_ansible|bool
+        - ansible_os_family == "RedHat"
+        - ansible_distribution == "Fedora"
 
     # Install pre-reqs for Ansible install
     - name: Installing Ansible Pre-Reqs (openSUSE)
@@ -128,9 +128,9 @@
         name: "{{ suse_packages }}"
         state: present
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family == "Suse"
+      when:
+        - install_ansible|bool
+        - ansible_os_family == "Suse"
 
     # Upgrading these packages to ensure a successful Ansible install
     - name: Updating Python Modules
@@ -152,7 +152,7 @@
           command: python /tmp/get-pip.py
           become: true
 
-      when: install_ansible
+      when: install_ansible|bool
 
     # Install Ansible to run Ansible related tasks within guest
     - name: Installing Ansible
@@ -161,16 +161,16 @@
         state: present
         version: "{{ ansible_ver }}"
       become: true
-      when: >
-        install_ansible and
-        ansible_os_family != "Windows"
+      when:
+        - install_ansible|bool
+        - ansible_os_family != "Windows"
 
     - name: Enabling Windows AutoLogon
       win_regedit:
         path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
-        name: "{{ item['name'] }}"
-        data: "{{ item['data'] }}"
-        type: "{{ item['type'] }}"
+        name: "{{ item.name }}"
+        data: "{{ item.data }}"
+        type: "{{ item.type }}"
       loop:
         - name: AutoAdminLogon
           data: 1
@@ -189,7 +189,7 @@
 
     - name: Reboot Windows after AutoLogon
       win_reboot:
-      when: windows_autologon['changed']
+      when: windows_autologon.changed
 
     - name: Ensure Chocolatey is installed
       win_chocolatey:

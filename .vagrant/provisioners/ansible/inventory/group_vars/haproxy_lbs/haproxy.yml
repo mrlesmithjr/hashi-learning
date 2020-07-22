@@ -8,7 +8,7 @@ haproxy_configs:
     balance: roundrobin
     enabled: true
     frontend_name: http_front
-    frontend_bind_address: "*"
+    frontend_bind_address: "{{ hostvars[inventory_hostname]['ansible_'+bind_interface]['ipv4']['address'] }}"
     frontend_bind_port: 80
     server_template:
       prefix: mywebapp

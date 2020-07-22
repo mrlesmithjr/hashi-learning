@@ -1,0 +1,12 @@
+---
+grafana_server_info:
+  domain: localhost
+  enable_gzip: false
+  enforce_domain: false
+  http_addr: 0.0.0.0
+  http_port: 3000
+  protocol: http
+  root_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+  router_logging: false
+  serve_from_sub_path: true
+  static_root_path: public

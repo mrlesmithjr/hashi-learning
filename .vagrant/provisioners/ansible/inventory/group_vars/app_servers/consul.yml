@@ -1,6 +1,11 @@
 ---
 # Define Consul services for app servers
 consul_services:
+  - name: grafana
+    port: 3000
+    script: curl --silent http://localhost:3000/api/health
+    interval: 3s
+    state: present
   - name: web
     port: 80
     script: curl --silent http://localhost

@@ -19,3 +19,6 @@
 [submodule "roles/ansible-nginx"]
 	path = roles/ansible-nginx
 	url = https://github.com/mrlesmithjr/ansible-nginx.git
+[submodule "roles/ansible-grafana"]
+	path = roles/ansible-grafana
+	url = https://github.com/mrlesmithjr/ansible-grafana.git

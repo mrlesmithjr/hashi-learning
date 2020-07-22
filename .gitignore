@@ -5,4 +5,8 @@
 .vagrant/machines
 .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
 .vagrant/rgloader
+*.box
+manifest.json
+packer_cache/
+site/
 venv/

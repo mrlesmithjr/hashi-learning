@@ -19,6 +19,10 @@
         state: present
       become: true
 
+    - name: Apply ansible-grafana role
+      import_role:
+        name: ansible-grafana
+
 - hosts: app_servers
   tasks:
     - name: Manage Consul Services
