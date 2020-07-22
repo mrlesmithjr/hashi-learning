@@ -1,12 +1,94 @@
 ---
 - hosts: consul_servers
 
-- hosts: loadbalancers
+- hosts: haproxy_lbs
   tasks:
     - name: Apply ansible-consul-client
       import_role:
         name: ansible-consul-client
 
+    - name: Flush Handlers
+      meta: flush_handlers
+
     - name: Applying ansible-haproxy
       import_role:
         name: ansible-haproxy
+
+- hosts: nginx_lbs
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+        enabled: true
+      become: true
+  tasks:
+    - name: Apply ansible-consul-client
+      import_role:
+        name: ansible-consul-client
+
+    - name: Flush Handlers # Ensure that our Consul client is up and running
+      meta: flush_handlers
+
+    # We use the PPA which provides us additional LB functionality
+    - name: Adding NGINX PPA
+      apt_repository:
+        repo: ppa:nginx/stable
+        state: present
+      become: true
+      register: result
+      until: result is successful
+
+    - name: Installing NGINX
+      apt:
+        name: nginx
+        state: present
+      become: true
+      register: result
+      until: result is successful
+
+    - name: Configuring Nginx
+      template:
+        src: templates/loadbalancers/etc/nginx/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+        validate: nginx -t -c %s
+      become: true
+      notify:
+        - restart nginx
+
+    - name: Disabling Default Website Configuration
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      become: true
+      notify:
+        - restart nginx
+
+    - name: Configuring Nginx Gateway
+      template:
+        src: templates/loadbalancers/etc/nginx/sites-available/gateway.j2
+        dest: /etc/nginx/sites-available/gateway
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+        validate: echo "http { include %s; }" > /tmp/n && nginx -t -c /tmp/n
+      become: true
+      notify:
+        - restart nginx
+
+    - name: Enabling Nginx Gateway Configuration
+      file:
+        src: /etc/nginx/sites-available/gateway
+        dest: /etc/nginx/sites-enabled/gateway
+        owner: root
+        group: root
+        state: link
+      become: true
+      notify:
+        - restart nginx
+
+    - name: Flush Handler # Ensure NGINX comes up correctly
+      meta: flush_handlers

@@ -7,8 +7,10 @@
 
 - import_playbook: consul.yml
 
+- import_playbook: consul_dnsmasq_systemd_resolved.yml
+
 - import_playbook: vault.yml
 
-- import_playbook: loadbalancers.yml
-
 - import_playbook: app_servers.yml
+
+- import_playbook: loadbalancers.yml

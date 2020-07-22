@@ -1,3 +1,15 @@
+commit 4affa14414dcd1a55fcecddd96a5062670f5d3d6
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Sun Jul 19 02:11:57 2020 -0400
+
+    Added beginning of systemd-resolved/Consul/Dnsmasq integrations
+
+commit 1675767c7ed6ea51cb5458c7cd71d858abc77d47
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Sat Jul 18 13:12:16 2020 -0400
+
+    Added .DS_Store to Git ignore
+
 commit 2f132c44ba5ffb17599a227e90ed95df01a709c2
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Sat Jul 18 11:15:34 2020 -0400

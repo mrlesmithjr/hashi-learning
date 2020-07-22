@@ -1,0 +1,105 @@
+---
+# Global provisioners will run against every node in the order specified.
+# These provisioners run after all node specific provisioners if defined.
+#
+# For node specific provisioners add at the node level
+provisioners: []
+# - type: shell
+#   inline: |
+#       if [ -f /etc/os-release ]; then
+#           os_name="$(awk -F= '/^NAME/{ print $2 }' /etc/os-release | sed 's/"//g')"
+#           os_version_id="$(awk -F= '/^VERSION_ID/{ print $2}' /etc/os-release | sed 's/"//g')"
+#           echo $os_name
+#           echo $os_version_id
+#       fi
+#   privileged: true
+# - type: shell
+#   path:
+#     - scripts/test.sh
+#   privileged: false
+# - type: ansible_local
+#   playbooks:
+#     - /vagrant/playbooks/test.yml
+# - type: ansible
+#   playbooks:
+#     - playbooks/test.yml
+
+# Synced folders
+# Additional synced folders.
+# By default scripts and playbooks are synced, and available in each node as:
+# /playbooks, /scripts, /vagrant/playbooks, and /vagrant/scripts. They are
+# duplicated because of the symlinks within /vagrant. This is as designed.
+synced_folders:
+  []
+  # - type: nfs
+  #   src: example1/
+  #   mountpoint: /example1
+  # - type: rsync
+  #   src: example2/
+  #   mountpoint: /example2
+
+# Define nodes which are required for the environment you intend on creating.
+nodes:
+  - name: consul01
+    ansible_groups:
+      - consul_servers
+    box: local/ubuntu1804
+    desktop: false
+    disable_synced_folders: false
+    disks: []
+    functional_hgfs: true
+    interfaces:
+      - ip: 192.168.250.11
+        auto_config: true
+        method: static
+    linked_clone: true
+    mem: 512
+    nested_virtualization: false
+    provision: true
+    provisioners: []
+    ssh_use_public_ip: false
+    vcpu: 1
+    port_forwards: []
+    windows: false
+  - name: consul02
+    ansible_groups:
+      - consul_servers
+    box: local/ubuntu1804
+    desktop: false
+    disable_synced_folders: false
+    disks: []
+    functional_hgfs: true
+    interfaces:
+      - ip: 192.168.250.12
+        auto_config: true
+        method: static
+    linked_clone: true
+    mem: 512
+    nested_virtualization: false
+    provision: true
+    provisioners: []
+    ssh_use_public_ip: false
+    vcpu: 1
+    port_forwards: []
+    windows: false
+  - name: consul03
+    ansible_groups:
+      - consul_servers
+    box: local/ubuntu1804
+    desktop: false
+    disable_synced_folders: false
+    disks: []
+    functional_hgfs: true
+    interfaces:
+      - ip: 192.168.250.13
+        auto_config: true
+        method: static
+    linked_clone: true
+    mem: 512
+    nested_virtualization: false
+    provision: true
+    provisioners: []
+    ssh_use_public_ip: false
+    vcpu: 1
+    port_forwards: []
+    windows: false
