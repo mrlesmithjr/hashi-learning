@@ -217,14 +217,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#images" class="md-nav__link">
-    Images
-  </a>
-  
-    <nav class="md-nav" aria-label="Images">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#template" class="md-nav__link">
     Template
   </a>
@@ -235,6 +227,13 @@
           <li class="md-nav__item">
   <a href="#ubuntu-1804-template" class="md-nav__link">
     Ubuntu 18.04 Template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-variables" class="md-nav__link">
+    User Variables
   </a>
   
 </li>
@@ -258,6 +257,14 @@
     Post-Processors
   </a>
   
+    <nav class="md-nav" aria-label="Post-Processors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vagrant" class="md-nav__link">
+    Vagrant
+  </a>
+  
 </li>
         
       </ul>
@@ -265,22 +272,29 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#validating" class="md-nav__link">
     Validating
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#building" class="md-nav__link">
     Building
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#consuming" class="md-nav__link">
+    Consuming
+  </a>
   
 </li>
       
@@ -420,14 +434,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#images" class="md-nav__link">
-    Images
-  </a>
-  
-    <nav class="md-nav" aria-label="Images">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#template" class="md-nav__link">
     Template
   </a>
@@ -438,6 +444,13 @@
           <li class="md-nav__item">
   <a href="#ubuntu-1804-template" class="md-nav__link">
     Ubuntu 18.04 Template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-variables" class="md-nav__link">
+    User Variables
   </a>
   
 </li>
@@ -461,6 +474,14 @@
     Post-Processors
   </a>
   
+    <nav class="md-nav" aria-label="Post-Processors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vagrant" class="md-nav__link">
+    Vagrant
+  </a>
+  
 </li>
         
       </ul>
@@ -468,22 +489,29 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#validating" class="md-nav__link">
     Validating
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#building" class="md-nav__link">
     Building
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#consuming" class="md-nav__link">
+    Consuming
+  </a>
   
 </li>
       
@@ -511,33 +539,20 @@
 <p>Before we can get started using Packer, we need to first install it. So, please
 follow the instructions found <a href="https://www.packer.io/downloads">here</a> based on
 your OS.</p>
-<h2 id="images">Images</h2>
-<p>Now that you've installed Packer, let's go ahead and build our first image. Our
-first image will be a <code>Ubuntu 18.04</code> server image. We will be using this image
-as part of our learning from here on out once we've completed the build.</p>
-<h3 id="template">Template</h3>
-<p>The very first thing you'll need in order to build a Packer image is a template.
-A Packer template is the configuration that describes the image that you intend
-to build. This template is written in JSON.</p>
+<h2 id="template">Template</h2>
+<p>Now that Packer is installed, let's begin walking through what is required to
+build our first image.</p>
+<p>The very first thing you'll need, is a template. A Packer template is the configuration that describes the image that you intend to build. This template is written in JSON.</p>
 <p>We have included a <code>Ubuntu 18.04</code> template as part of this repository that will
 be used. You can find this template in <code>learning/Packer</code>, and the template name
 is <code>ubuntu1804.json</code>.</p>
-<h4 id="ubuntu-1804-template">Ubuntu 18.04 Template</h4>
+<blockquote>
+<p>NOTE: Our <code>Ubuntu 18.04</code> image will be what we use from here on our throughout
+this learning.</p>
+</blockquote>
+<h3 id="ubuntu-1804-template">Ubuntu 18.04 Template</h3>
 <p>The following template is the one we will be using here in a few moments.</p>
 <pre><code class="json">{
-  &quot;variables&quot;: {
-    &quot;boot_command_prefix&quot;: &quot;&lt;enter&gt;&lt;wait&gt;&lt;f6&gt;&lt;esc&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&quot;,
-    &quot;compression_level&quot;: &quot;6&quot;,
-    &quot;iso_checksum&quot;: &quot;e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b&quot;,
-    &quot;iso_url&quot;: &quot;http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso&quot;,
-    &quot;vm_disk_adapter_type&quot;: &quot;scsi&quot;,
-    &quot;vm_disk_size&quot;: &quot;36864&quot;,
-    &quot;vm_memory&quot;: &quot;1024&quot;,
-    &quot;vm_name&quot;: &quot;ubuntu1804&quot;,
-    &quot;vm_ssh_password&quot;: &quot;vagrant&quot;,
-    &quot;vm_ssh_username&quot;: &quot;vagrant&quot;,
-    &quot;vm_vcpu&quot;: &quot;1&quot;
-  },
   &quot;builders&quot;: [
     {
       &quot;boot_command&quot;: [
@@ -567,23 +582,43 @@ is <code>ubuntu1804.json</code>.</p>
       &quot;output_directory&quot;: &quot;output-{{ user `vm_name` }}-{{ build_type }}-{{ timestamp }}&quot;,
       &quot;shutdown_command&quot;: &quot;echo '/sbin/halt -h -p' &gt; shutdown.sh; echo 'packer'|sudo -S bash 'shutdown.sh'&quot;,
       &quot;ssh_password&quot;: &quot;{{ user `vm_ssh_password` }}&quot;,
+      &quot;ssh_timeout&quot;: &quot;60m&quot;,
       &quot;ssh_username&quot;: &quot;{{ user `vm_ssh_username` }}&quot;,
       &quot;type&quot;: &quot;virtualbox-iso&quot;,
-      &quot;vm_name&quot;: &quot;{{ user `vm_name` }}-{{ timestamp }}&quot;,
-      &quot;ssh_timeout&quot;: &quot;60m&quot;
-    }
-  ],
-  &quot;provisioners&quot;: [
+      &quot;vm_name&quot;: &quot;{{ user `vm_name` }}-{{ timestamp }}&quot;
+    },
     {
-      &quot;type&quot;: &quot;shell&quot;,
-      &quot;scripts&quot;: [
-        &quot;scripts/base.sh&quot;,
-        &quot;scripts/vagrant.sh&quot;,
-        &quot;scripts/virtualbox.sh&quot;,
-        &quot;scripts/vmware.sh&quot;,
-        &quot;scripts/cleanup.sh&quot;,
-        &quot;scripts/zerodisk.sh&quot;
-      ]
+      &quot;boot_command&quot;: [
+        &quot;{{ user `boot_command_prefix` }}&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot;/install/vmlinuz&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; initrd=/install/initrd.gz&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; auto=true&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; priority=critical&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot; url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu/preseed.cfg &lt;wait&gt;&quot;,
+        &quot;&lt;wait&gt;&quot;,
+        &quot;&lt;enter&gt;&quot;
+      ],
+      &quot;cpus&quot;: &quot;{{ user `vm_vcpu` }}&quot;,
+      &quot;disk_adapter_type&quot;: &quot;{{ user `vm_disk_adapter_type` }}&quot;,
+      &quot;disk_size&quot;: &quot;{{ user `vm_disk_size` }}&quot;,
+      &quot;guest_os_type&quot;: &quot;ubuntu-64&quot;,
+      &quot;headless&quot;: true,
+      &quot;http_directory&quot;: &quot;http&quot;,
+      &quot;iso_checksum&quot;: &quot;{{ user `iso_checksum` }}&quot;,
+      &quot;iso_url&quot;: &quot;{{ user `iso_url` }}&quot;,
+      &quot;memory&quot;: &quot;{{ user `vm_memory` }}&quot;,
+      &quot;output_directory&quot;: &quot;output-{{ user `vm_name` }}-{{ build_type }}-{{ timestamp }}&quot;,
+      &quot;shutdown_command&quot;: &quot;echo '/sbin/halt -h -p' &gt; shutdown.sh; echo 'packer'|sudo -S bash 'shutdown.sh'&quot;,
+      &quot;ssh_password&quot;: &quot;{{ user `vm_ssh_password` }}&quot;,
+      &quot;ssh_timeout&quot;: &quot;60m&quot;,
+      &quot;ssh_username&quot;: &quot;{{ user `vm_ssh_username` }}&quot;,
+      &quot;type&quot;: &quot;vmware-iso&quot;,
+      &quot;vm_name&quot;: &quot;{{ user `vm_name` }}-{{ timestamp }}&quot;
     }
   ],
   &quot;post-processors&quot;: [
@@ -594,35 +629,106 @@ is <code>ubuntu1804.json</code>.</p>
         &quot;type&quot;: &quot;vagrant&quot;
       },
       {
-        &quot;type&quot;: &quot;manifest&quot;,
         &quot;output&quot;: &quot;manifest.json&quot;,
-        &quot;strip_path&quot;: true
+        &quot;strip_path&quot;: true,
+        &quot;type&quot;: &quot;manifest&quot;
       }
     ]
-  ]
+  ],
+  &quot;provisioners&quot;: [
+    {
+      &quot;scripts&quot;: [
+        &quot;scripts/base.sh&quot;,
+        &quot;scripts/vagrant.sh&quot;,
+        &quot;scripts/virtualbox.sh&quot;,
+        &quot;scripts/vmware.sh&quot;,
+        &quot;scripts/cleanup.sh&quot;,
+        &quot;scripts/zerodisk.sh&quot;
+      ],
+      &quot;type&quot;: &quot;shell&quot;
+    }
+  ],
+  &quot;variables&quot;: {
+    &quot;boot_command_prefix&quot;: &quot;&lt;enter&gt;&lt;wait&gt;&lt;f6&gt;&lt;esc&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&lt;bs&gt;&quot;,
+    &quot;compression_level&quot;: &quot;6&quot;,
+    &quot;iso_checksum&quot;: &quot;e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b&quot;,
+    &quot;iso_url&quot;: &quot;http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso&quot;,
+    &quot;vm_disk_adapter_type&quot;: &quot;scsi&quot;,
+    &quot;vm_disk_size&quot;: &quot;36864&quot;,
+    &quot;vm_memory&quot;: &quot;1024&quot;,
+    &quot;vm_name&quot;: &quot;ubuntu1804&quot;,
+    &quot;vm_ssh_password&quot;: &quot;vagrant&quot;,
+    &quot;vm_ssh_username&quot;: &quot;vagrant&quot;,
+    &quot;vm_vcpu&quot;: &quot;1&quot;
+  }
 }
 </code></pre>
 
-<h4 id="builders">Builders</h4>
-<h4 id="provisioners">Provisioners</h4>
-<h4 id="post-processors">Post-Processors</h4>
-<h3 id="validating">Validating</h3>
+<h3 id="user-variables">User Variables</h3>
+<p>User variables are defined within a template as <code>variables</code>. These variables
+allow us to parameterize portions of our templates and make them portable. We
+can also pass variables as arguments (<code>-var</code>, <code>-var-file</code>) when executing Packer
+to allow us to pass defaults along.</p>
+<p>By using the <code>-var</code> argument, we can define a specific variable such as:</p>
+<pre><code class="bash">packer build -var username=superuser -var password=supersecretpassword template.json
+</code></pre>
+
+<p>We can also use the <code>-var-file</code> argument to pass additional variables from a
+JSON file. An example of this could be:</p>
+<p><code>variables.json</code>:</p>
+<pre><code class="json">{ &quot;username&quot;: &quot;superuser&quot;, &quot;password&quot;: &quot;supersecretpassword&quot; }
+</code></pre>
+
+<p>And then we can pass this onto Packer:</p>
+<pre><code class="bash">packer build -var-file variables.json template.json
+</code></pre>
+
+<h3 id="builders">Builders</h3>
+<p>Builders are what Packer uses to create and generate OS images. Builders are
+available for numerous different platforms and each one has their own specific
+configuration options.</p>
+<p>Some examples of Packer builders include:</p>
+<ul>
+<li><a href="https://www.packer.io/docs/builders/azure">Azure</a></li>
+<li><a href="https://www.packer.io/docs/builders/digitalocean">DigitalOcean</a></li>
+<li><a href="https://www.packer.io/docs/builders/vagrant">Vagrant</a></li>
+<li><a href="https://www.packer.io/docs/builders/virtualbox">VirtualBox</a></li>
+<li><a href="https://www.packer.io/docs/builders/vmware">VMware</a></li>
+</ul>
+<blockquote>
+<p>NOTE: Our <code>ubuntu1804.json</code> template has the following builders:
+<code>virtualbox-iso</code> and <code>vmware-iso</code>.</p>
+</blockquote>
+<h3 id="provisioners">Provisioners</h3>
+<p>Provisioners are an array of provisioners that Packer will use to install, configure, etc. within our image. These may include Ansible, Chef, Puppet, Shell scripts, Powershell, etc. Provisioners are also optional within a template.</p>
+<h3 id="post-processors">Post-Processors</h3>
+<p>Post-processors are tasks that execute after any provisioners that may be defined.
+Otherwise, after the builders complete. Post-processors are used for artifacts,
+conversions, etc.</p>
+<h4 id="vagrant">Vagrant</h4>
+<p>The Vagrant post-processor comsumes an existing build and then converts it to
+a consumable Vagrant box. One thing to note is that all Vagrant boxes are
+provider specific. So, whichever Packer builder is used when creating an image.
+The Vagrant post-processor will generate the Vagrant box for that provider.</p>
+<h2 id="validating">Validating</h2>
 <p>Now that we have the template that we will be using, we should first validate
 it. So, let's go ahead and do that now.</p>
 <pre><code class="bash">cd learning/Packer
 packer validate ubuntu1804.json
 </code></pre>
 
-<h3 id="building">Building</h3>
+<h2 id="building">Building</h2>
 <p>Now that our template has been validated, we are ready to build our first image.
 So, if you are not currently in the <code>learning/Packer</code> directory, let's go ahead
 and change into that directory.</p>
 <p>Now that we're in the <code>learning/Packer</code> directory, let's go ahead and build our
-image.</p>
-<pre><code class="bash">packer build ubuntu1804.json
+image. Because we are using VirtualBox as our default virtualization, we will
+only build for our <code>virtualbox-iso</code> builder.</p>
+<pre><code class="bash">packer build -only virtualbox-iso ubuntu1804.json
 </code></pre>
 
-<pre><code class="bash">virtualbox-iso: output will be in this color.
+<pre><code class="bash">▶ packer build -only virtualbox-iso ubuntu1804.json
+virtualbox-iso: output will be in this color.
 
 ==&gt; virtualbox-iso: Retrieving Guest additions
 ==&gt; virtualbox-iso: Trying /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
@@ -631,16 +737,30 @@ image.</p>
 ==&gt; virtualbox-iso: Retrieving ISO
 ==&gt; virtualbox-iso: Trying http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso
 ==&gt; virtualbox-iso: Trying http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso?checksum=sha256%3Ae2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b
-ubuntu-18.04.4-server-amd64.iso 532.94 MiB / 921.00 MiB [=================================================&gt;-----------------------------------]  57.86% 00m28s
+==&gt; virtualbox-iso: http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso?checksum=sha256%3Ae2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b =&gt; /Users/larrysmithjr/Git_Projects/Personal/GitHub/mrlesmithjr/hashi-learning/learning/Packer/packer_cache/23ac40ee61da5cc4ecaa017cd6d33a162365c3ac.iso
+==&gt; virtualbox-iso: Starting HTTP server on port 8046
+==&gt; virtualbox-iso: Creating virtual machine...
+==&gt; virtualbox-iso: Creating hard drive...
+==&gt; virtualbox-iso: Creating forwarded port mapping for communicator (SSH, WinRM, etc) (host port 3952)
+==&gt; virtualbox-iso: Starting the virtual machine...
+    virtualbox-iso: The VM will be run headless, without a GUI. If you want to
+    virtualbox-iso: view the screen of the VM, connect via VRDP without a password to
+    virtualbox-iso: rdp://127.0.0.1:5933
+==&gt; virtualbox-iso: Waiting 10s for boot...
+==&gt; virtualbox-iso: Typing the boot command...
+==&gt; virtualbox-iso: Using ssh communicator to connect: 127.0.0.1
+==&gt; virtualbox-iso: Waiting for SSH to become available...
 ...
 ==&gt; Builds finished. The artifacts of successful builds are:
---&gt; virtualbox-iso: 'virtualbox' provider box: ubuntu1804-virtualbox-1595373302.box
+--&gt; virtualbox-iso: 'virtualbox' provider box: ubuntu1804-virtualbox-1595459323.box
 --&gt; virtualbox-iso:
 </code></pre>
 
 <p>And once the build completes you will have a <code>ubuntu-virtualbox-**********.box</code>
 file which is our Vagrant box image that we will be using. In the example
-above, my Vagrant box file was <code>ubuntu1804-virtualbox-1595373302.box</code>.</p>
+above, my Vagrant box file was <code>ubuntu1804-virtualbox-1595459323.box</code>.</p>
+<h2 id="consuming">Consuming</h2>
+<p>We will explore importing this new generated image in <a href="../03_Vagrant/#adding-images">03_Vagrant</a> and see how we can consume this image with Vagrant.</p>
                 
               
               

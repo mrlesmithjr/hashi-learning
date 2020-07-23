@@ -222,9 +222,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#adding-images" class="md-nav__link">
-    Adding Images
+  <a href="#boxes" class="md-nav__link">
+    Boxes
   </a>
+  
+    <nav class="md-nav" aria-label="Boxes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding" class="md-nav__link">
+    Adding
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listing" class="md-nav__link">
+    Listing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -345,9 +365,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#adding-images" class="md-nav__link">
-    Adding Images
+  <a href="#boxes" class="md-nav__link">
+    Boxes
   </a>
+  
+    <nav class="md-nav" aria-label="Boxes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding" class="md-nav__link">
+    Adding
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listing" class="md-nav__link">
+    Listing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -371,15 +411,47 @@
 <blockquote>
 <p>Vagrant is a tool for building and managing virtual machine environments in a single workflow. With an easy-to-use workflow and focus on automation, Vagrant lowers development environment setup time, increases production parity, and makes the "works on my machine" excuse a relic of the past.</p>
 </blockquote>
-<h2 id="adding-images">Adding Images</h2>
-<p>For our learning, we will be adding the image we build previously with Packer.</p>
-<pre><code class="bash">vagrant box add local/ubuntu1804 ubuntu1804-virtualbox-1595373302.box
+<h2 id="boxes">Boxes</h2>
+<h3 id="adding">Adding</h3>
+<p>For our learning, we will be adding the box we built using Packer back in
+<a href="../02_Packer/#building">02. Packer</a>. So, let's go ahead and do this now.</p>
+<blockquote>
+<p>NOTE: Replace the <code>1595459323</code> with whatever matches your build.</p>
+</blockquote>
+<pre><code class="bash">vagrant box add local/ubuntu1804 ubuntu1804-virtualbox-1595459323.box
 </code></pre>
 
 <pre><code class="bash">==&gt; box: Box file was not detected as metadata. Adding it directly...
 ==&gt; box: Adding box 'local/ubuntu1804' (v0) for provider:
-    box: Unpacking necessary files from: file:///Users/larrysmithjr/Git_Projects/Personal/GitHub/mrlesmithjr/hashi-learning/learning/Packer/ubuntu1804-virtualbox-1595373302.box
+    box: Unpacking necessary files from: file:///Users/larrysmithjr/Git_Projects/Personal/GitHub/mrlesmithjr/hashi-learning/learning/Packer/ubuntu1804-virtualbox-1595459323.box
 ==&gt; box: Successfully added box 'local/ubuntu1804' (v0) for 'virtualbox'!
+</code></pre>
+
+<p>We've successfully added our first Vagrant box! And as we mentioned previously,
+we will be using this image for the remainder of this learning.</p>
+<p>However, before we move on, let's add another box.</p>
+<pre><code class="bash">vagrant box add mrlesmithjr/centos7
+</code></pre>
+
+<pre><code class="bash">▶ vagrant box add mrlesmithjr/centos7
+==&gt; box: Loading metadata for box 'mrlesmithjr/centos7'
+    box: URL: https://vagrantcloud.com/mrlesmithjr/centos7
+==&gt; box: Adding box 'mrlesmithjr/centos7' (v1588339341) for provider: libvirt
+    box: Downloading: https://vagrantcloud.com/mrlesmithjr/boxes/centos7/versions/1588339341/providers/libvirt.box
+Download redirected to host: vagrantcloud-files-production.s3.amazonaws.com
+==&gt; box: Successfully added box 'mrlesmithjr/centos7' (v1588339341) for 'libvirt'!
+</code></pre>
+
+<p>We've now just successfully added a new box from <a href="https://app.vagrantup.com/boxes/search">Vagrant Cloud</a> for <code>CentOS 7</code> using the <code>libvirt</code> provider.</p>
+<h3 id="listing">Listing</h3>
+<p>Now that we've added our first box, we can get a quick list of boxes currently
+available by executing:</p>
+<pre><code class="bash">vagrant box list
+</code></pre>
+
+<pre><code class="bash">▶ vagrant box list
+local/ubuntu1804    (virtualbox, 0)
+mrlesmithjr/centos7 (libvirt, 1588339341)
 </code></pre>
                 
               
