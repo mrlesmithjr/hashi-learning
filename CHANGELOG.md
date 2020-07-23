@@ -1,3 +1,17 @@
+commit 5d58140182f0b74fad72a7fe7351d5a6ea462948
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Tue Jul 21 22:33:12 2020 -0400
+
+    Updated scenarios for Vault
+
+commit a748ff426c1527af9173010780f71fd0d8471423
+Author: Larry Smith Jr <mrlesmithjr@gmail.com>
+Date:   Tue Jul 21 22:29:31 2020 -0400
+
+    Reformatting beginning of previous Vault learning
+    
+    This needed to be redone to get in line with how Consul is coming along.
+
 commit 88cdfd9b1b82773dc14030ebba2c8416e183cdd7
 Author: Larry Smith Jr <mrlesmithjr@gmail.com>
 Date:   Tue Jul 21 20:07:46 2020 -0400
