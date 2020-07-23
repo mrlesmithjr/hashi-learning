@@ -175,3 +175,20 @@ Cluster ID      8041b47b-edc0-6f9e-4360-9999e3f4640e
 HA Enabled      false
 vagrant@vault01:/etc/vault.d$
 ```
+
+## Tearing Down
+
+After you've explored a single Vault node setup. You'll likely be ready to move
+onto more advanced scenarios. So, just as we did when spinning up. We can quickly
+tear everything down.
+
+```bash
+./scripts/cleanup.sh
+```
+
+```bash
+▶ ./scripts/cleanup.sh
+==> vault01: Forcing shutdown of VM...
+==> vault01: Destroying VM and associated drives...
+(venv)
+```
