@@ -11,8 +11,13 @@ require 'yaml'
 
 # Read yaml node definitions to create
 # **Update environment.yml to reflect any changes
-environment = YAML.load_file(File.join(File.dirname(__FILE__), ENV['SCENARIO']))
-nodes = environment['nodes']
+if ENV['SCENARIO'].nil?
+  environment = {}
+  nodes = []
+else
+  environment = YAML.load_file(File.join(File.dirname(__FILE__), ENV['SCENARIO']))
+  nodes = environment['nodes']
+end
 
 # Define global variables
 #
