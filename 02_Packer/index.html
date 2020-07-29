@@ -243,12 +243,38 @@
     Builders
   </a>
   
+    <nav class="md-nav" aria-label="Builders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#builders-hypervisors" class="md-nav__link">
+    Builders - Hypervisors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
   <a href="#provisioners" class="md-nav__link">
     Provisioners
   </a>
+  
+    <nav class="md-nav" aria-label="Provisioners">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#provisioners-custom" class="md-nav__link">
+    Provisioners - Custom
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -294,6 +320,13 @@
         <li class="md-nav__item">
   <a href="#consuming" class="md-nav__link">
     Consuming
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
   </a>
   
 </li>
@@ -460,12 +493,38 @@
     Builders
   </a>
   
+    <nav class="md-nav" aria-label="Builders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#builders-hypervisors" class="md-nav__link">
+    Builders - Hypervisors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
   <a href="#provisioners" class="md-nav__link">
     Provisioners
   </a>
+  
+    <nav class="md-nav" aria-label="Provisioners">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#provisioners-custom" class="md-nav__link">
+    Provisioners - Custom
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -511,6 +570,13 @@
         <li class="md-nav__item">
   <a href="#consuming" class="md-nav__link">
     Consuming
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
   </a>
   
 </li>
@@ -691,6 +757,7 @@ configuration options.</p>
 <ul>
 <li><a href="https://www.packer.io/docs/builders/azure">Azure</a></li>
 <li><a href="https://www.packer.io/docs/builders/digitalocean">DigitalOcean</a></li>
+<li><a href="https://www.packer.io/docs/builders/docker">Docker</a></li>
 <li><a href="https://www.packer.io/docs/builders/vagrant">Vagrant</a></li>
 <li><a href="https://www.packer.io/docs/builders/virtualbox">VirtualBox</a></li>
 <li><a href="https://www.packer.io/docs/builders/vmware">VMware</a></li>
@@ -699,8 +766,43 @@ configuration options.</p>
 <p>NOTE: Our <code>ubuntu1804.json</code> template has the following builders:
 <code>virtualbox-iso</code> and <code>vmware-iso</code>.</p>
 </blockquote>
+<h4 id="builders-hypervisors">Builders - Hypervisors</h4>
+<p>When using Packer, you may at some point likely run into an issue when having
+more than one Hypervisor installed. This is generally not an issue for Packer
+except when multiple builder types are kicked off at the same time.</p>
+<p>For example, you will run into issues when attempting to build for both <code>QEMU/KVM</code> and <code>VirtualBox</code> at the same time. And when you do, you'll likely see an
+error along the lines of “Intel VT-x is in use by another hypervisor”. This is
+because both Hypervisors are attempting to use the same CPU instructions.</p>
+<p>This can be solved by using Packer build flags such as, <code>--only virtualbox-iso</code> and <code>--only qemu</code> respectively. You can also solve this by using <code>--except qemu</code> and <code>--only qemu</code>.</p>
+<p>Using the above example would look like:</p>
+<pre><code class="bash">packer build --only virtualbox-iso template.json
+packer build --only qemu template.json
+</code></pre>
+
+<p>Or:</p>
+<pre><code class="bash">packer build --except qemu template.json
+packer build --only qemu template.json
+</code></pre>
+
+<p>Another way we can control this would be to use a script:</p>
+<p><code>build.sh</code>:</p>
+<pre><code class="bash">#!/usr/bin/env bash
+packer build --except qemu template.json
+
+command -v qemu-system-x86_64 --version &gt;/dev/null 2&gt;&amp;1
+QEMU_CHECK=$?
+if [ $QEMU_CHECK -eq 0 ]; then
+    packer build --only qemu template.json
+fi
+</code></pre>
+
 <h3 id="provisioners">Provisioners</h3>
 <p>Provisioners are an array of provisioners that Packer will use to install, configure, etc. within our image. These may include Ansible, Chef, Puppet, Shell scripts, Powershell, etc. Provisioners are also optional within a template.</p>
+<h4 id="provisioners-custom">Provisioners - Custom</h4>
+<p>Because Packer is extensible, custom provisioners can be created by anyone.
+There are numerous custom provisioners available, but one that we use quite
+often is for Windows images. The <a href="https://github.com/rgl/packer-provisioner-windows-update">packer-provisioner-windows-update</a> is an excellent custom
+provisioner for updating Windows images prior to packaging the image up.</p>
 <h3 id="post-processors">Post-Processors</h3>
 <p>Post-processors are tasks that execute after any provisioners that may be defined.
 Otherwise, after the builders complete. Post-processors are used for artifacts,
@@ -761,6 +863,9 @@ file which is our Vagrant box image that we will be using. In the example
 above, my Vagrant box file was <code>ubuntu1804-virtualbox-1595459323.box</code>.</p>
 <h2 id="consuming">Consuming</h2>
 <p>We will explore importing this new generated image in <a href="../03_Vagrant/#adding-images">03_Vagrant</a> and see how we can consume this image with Vagrant.</p>
+<h2 id="examples">Examples</h2>
+<p>For a reference of various Packer templates, feel free to checkout a collection
+of templates we maintain <a href="https://github.com/mrlesmithjr/packer-templates">here</a>.</p>
                 
               
               
