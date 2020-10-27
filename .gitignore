@@ -8,5 +8,6 @@
 *.box
 manifest.json
 packer_cache/
+packer-manifest.json
 site/
 venv/
