@@ -22,3 +22,9 @@
 [submodule "roles/ansible-grafana"]
 	path = roles/ansible-grafana
 	url = https://github.com/mrlesmithjr/ansible-grafana.git
+[submodule "roles/ansible-nomad"]
+	path = roles/ansible-nomad
+	url = https://github.com/mrlesmithjr/ansible-nomad.git
+[submodule "roles/ansible-docker"]
+	path = roles/ansible-docker
+	url = https://github.com/mrlesmithjr/ansible-docker.git
