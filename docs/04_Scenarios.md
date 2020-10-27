@@ -12,3 +12,4 @@ from below and follow any of the instructions required.
 - [Consul NGINX Reverse Proxy](08_Consul_NGINX_Reverse_Proxy.md)
 - [Vault](09_Vault.md) - A single node Vault server
 - [Vault HA](10_Vault_HA.md) - Vault high availability w/Consul cluster storage
+- [Nomad](11_Nomad.md) - A single node Nomad server

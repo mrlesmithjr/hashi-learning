@@ -1,0 +1,10 @@
+---
+- hosts: nomad_servers
+  tasks:
+    - name: Applying ansible-docker
+      import_role:
+        name: ansible-docker
+
+    - name: Applying ansible-nomad
+      import_role:
+        name: ansible-nomad

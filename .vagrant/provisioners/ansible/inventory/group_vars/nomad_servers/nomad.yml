@@ -1,0 +1,34 @@
+---
+nomad_configuration:
+  advertise:
+    http: "{{ hostvars[inventory_hostname]['ansible_' + nomad_bind_interface]['ipv4']['address'] }}"
+    rpc: "{{ hostvars[inventory_hostname]['ansible_' + nomad_bind_interface]['ipv4']['address'] }}"
+    serf: "{{ hostvars[inventory_hostname]['ansible_' + nomad_bind_interface]['ipv4']['address'] }}"
+  # bind_addr: "{{ hostvars[inventory_hostname]['ansible_' + nomad_bind_interface]['ipv4']['address'] }}"
+  bind_addr: 0.0.0.0
+  client:
+    enabled: true
+    servers:
+      - 127.0.0.1:4646
+  consul:
+    address: 127.0.0.1:8500
+    server_service_name: nomad
+    client_service_name: nomad-client
+    auto_advertise: true
+    server_auto_join: true
+    client_auto_join: true
+  data_dir: /opt/nomad/data
+  datacenter: "{{ consul_datacenter }}"
+  enable_syslog: true
+  server:
+    enabled: true
+    server_join:
+      {}
+      # retry_join: |
+      #   {% set servers = [] %}
+      #   {% for server in groups[nomad_servers_group] %}
+      #   {%   set _ = servers.append(hostvars[server]['ansible_'+nomad_bind_interface]['ipv4']['address']) %}
+      #   {% endfor %}
+      #   {{ servers }}
+
+nomad_servers_group: nomad_servers

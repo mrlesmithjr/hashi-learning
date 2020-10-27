@@ -1,30 +1,30 @@
 [submodule "roles/ansible-bootstrap-python"]
-	path = roles/ansible-bootstrap-python
-	url = https://github.com/mrlesmithjr/ansible-bootstrap-python.git
+path = roles/ansible-bootstrap-python
+url = https://github.com/mrlesmithjr/ansible-bootstrap-python.git
 [submodule "roles/ansible-consul"]
-	path = roles/ansible-consul
-	url = https://github.com/mrlesmithjr/ansible-consul.git
+path = roles/ansible-consul
+url = https://github.com/mrlesmithjr/ansible-consul.git
 [submodule "roles/ansible-consul-client"]
-	path = roles/ansible-consul-client
-	url = https://github.com/mrlesmithjr/ansible-consul-client.git
+path = roles/ansible-consul-client
+url = https://github.com/mrlesmithjr/ansible-consul-client.git
 [submodule "roles/ansible-hashi-vault"]
-	path = roles/ansible-hashi-vault
-	url = https://github.com/mrlesmithjr/ansible-hashi-vault.git
+path = roles/ansible-hashi-vault
+url = https://github.com/mrlesmithjr/ansible-hashi-vault.git
 [submodule "roles/ansible-haproxy"]
-	path = roles/ansible-haproxy
-	url = https://github.com/mrlesmithjr/ansible-haproxy.git
+path = roles/ansible-haproxy
+url = https://github.com/mrlesmithjr/ansible-haproxy.git
 [submodule "roles/ansible-keepalived"]
-	path = roles/ansible-keepalived
-	url = https://github.com/mrlesmithjr/ansible-keepalived.git
+path = roles/ansible-keepalived
+url = https://github.com/mrlesmithjr/ansible-keepalived.git
 [submodule "roles/ansible-nginx"]
-	path = roles/ansible-nginx
-	url = https://github.com/mrlesmithjr/ansible-nginx.git
+path = roles/ansible-nginx
+url = https://github.com/mrlesmithjr/ansible-nginx.git
 [submodule "roles/ansible-grafana"]
-	path = roles/ansible-grafana
-	url = https://github.com/mrlesmithjr/ansible-grafana.git
+path = roles/ansible-grafana
+url = https://github.com/mrlesmithjr/ansible-grafana.git
 [submodule "roles/ansible-nomad"]
 	path = roles/ansible-nomad
 	url = https://github.com/mrlesmithjr/ansible-nomad.git
 [submodule "roles/ansible-docker"]
-	path = roles/ansible-docker
-	url = https://github.com/mrlesmithjr/ansible-docker.git
+path = roles/ansible-docker
+url = https://github.com/mrlesmithjr/ansible-docker.git

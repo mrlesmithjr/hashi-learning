@@ -17,3 +17,5 @@
 - import_playbook: app_servers.yml
 
 - import_playbook: loadbalancers.yml
+
+- import_playbook: nomad.yml
